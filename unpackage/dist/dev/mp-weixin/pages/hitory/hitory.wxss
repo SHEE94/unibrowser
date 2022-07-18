@@ -1,0 +1,38 @@
+.top-bar {
+  height: 70rpx;
+  background-color: #f7f7f7;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: reverse;
+  -webkit-flex-direction: row-reverse;
+          flex-direction: row-reverse;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  padding: 0 40rpx;
+  color: #515151;
+  border-top: 1px solid #ededed;
+}
+.list-content {
+  padding-top: 75rpx;
+}
+.list-content .list {
+  padding: 10rpx 30rpx;
+  font-size: 28rpx;
+  color: #515151;
+  border-bottom: 1px solid #efefef;
+}
+.list-content .list .url {
+  color: #999999;
+  white-space: nowrap;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+

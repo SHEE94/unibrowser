@@ -1,0 +1,270 @@
+*,
+*::after,
+*::before {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Inconsolata', 'Monaco', monospace;
+	overflow: hidden;
+	margin: 0;
+	color: #515151;
+	background: #f7f7f7;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.main-wrap {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	height: 100vh;
+	background-repeat: no-repeat;
+	background-position: 50% 10em;
+	background-size: 75% auto;
+}
+
+
+/* Buttons */
+
+.btn {
+	margin: 0;
+	padding: 0;
+	cursor: pointer;
+	border: none;
+	background: none;
+}
+
+.btn:focus {
+	outline: none;
+}
+
+.btn--search {
+	font-size: 1.5em;
+}
+
+.btn--hidden {
+	pointer-events: none;
+	opacity: 0;
+}
+
+
+/* Reset Search Input */
+
+.search__input {
+	border: 0;
+	background: transparent;
+	border-radius: 0;
+	-webkit-appearance: none;
+}
+
+.search__input:focus {
+	outline: none;
+}
+
+
+/* Links */
+
+a,
+.btn {
+	text-decoration: none;
+	color: #d17c78;
+	outline: none;
+}
+
+.hidden {
+	position: absolute;
+	overflow: hidden;
+	width: 0;
+	height: 0;
+	pointer-events: none;
+}
+
+
+/* Icons */
+
+.icon {
+	display: block;
+	width: 1.5em;
+	height: 1.5em;
+	margin: 0 auto;
+	fill: currentColor;
+}
+
+
+/* Header */
+
+.codrops-header {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: center;
+	width: 100%;
+	padding: 2.5em 2.75em 2.5em 1.5em;
+	text-align: left;
+}
+
+.codrops-header__title {
+	font-size: 1em;
+	margin: 0;
+	padding: 0 0.75em;
+}
+
+.codrops-header__side,
+.search-wrap {
+	margin: 0 0 0 auto;
+}
+
+
+/* Bottom nav */
+
+.bottom-nav {
+	position: relative;
+	width: 100%;
+	margin: auto 0 0 0;
+	padding: 2.5em 2.75em 2.5em 2em;
+}
+
+
+/* Demo links */
+
+.codrops-demos {
+	font-weight: bold;
+	padding: 1.25em 0;
+	text-align: right;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-touch-callout: none;
+}
+
+.codrops-demos span {
+	display: inline-block;
+	margin: 0 1em 0 0;
+	vertical-align: bottom;
+}
+
+.codrops-demos a {
+	position: relative;
+	display: inline-block;
+	margin: 0 0.1em;
+	padding: 0 0.4em;
+}
+
+.codrops-demos a.current-demo::before {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 2.25em;
+	height: 2.25em;
+	margin: -1.125em 0 0 -1.125em;
+	border: 2px solid;
+	border-radius: 50%;
+}
+
+
+/* Top Navigation Style */
+
+.codrops-links {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	text-align: center;
+	white-space: nowrap;
+}
+
+.codrops-links::after {
+	content: '';
+	position: absolute;
+	top: 15%;
+	left: 50%;
+	width: 2px;
+	height: 70%;
+	opacity: 0.1;
+	background: currentColor;
+	transform: rotate3d(0, 0, 1, 22.5deg);
+}
+
+.codrops-icon {
+	display: inline-block;
+	margin: 0.5em;
+	padding: 0.5em;
+}
+
+
+/* Deco lines */
+
+.decolines {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100vh;
+	pointer-events: none;
+}
+
+.decoline {
+	position: absolute;
+	width: 1px;
+	height: 100%;
+	background: #ddd;
+}
+
+.decoline:first-child {
+	right: 88em;
+}
+
+.decoline:nth-child(2) {
+	right: 68em;
+}
+
+.decoline:nth-child(3) {
+	right: 48em;
+}
+
+.decoline:nth-child(4) {
+	right: 28em;
+}
+
+.decoline:nth-child(5) {
+	right: 8em;
+}
+
+@media screen and (max-width: 40em) {
+	.codrops-header {
+		display: block;
+		padding: 4em 1em 0;
+		text-align: center;
+	}
+	.codrops-header__side {
+		margin: 0 auto;
+	}
+	.codrops-links {
+		font-size: 0.85em;
+		margin: 0 auto;
+	}
+	.search-wrap {
+		font-size: 0.85em;
+		position: absolute;
+		top: 2.15em;
+		right: 2em;
+	}
+	.bottom-nav {
+		padding: 0.5em;
+	}
+	.codrops-demos {
+		text-align: center;
+	}
+	.codrops-demos a {
+		margin-bottom: 1em;
+	}
+	.codrops-demos span {
+		display: block;
+		margin: 0 auto 1em;
+		text-align: center;
+	}
+}

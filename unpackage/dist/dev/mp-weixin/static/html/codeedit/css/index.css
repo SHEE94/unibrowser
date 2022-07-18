@@ -1,0 +1,49 @@
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+html,
+body {
+  background: #eee;
+}
+#commands {
+  height: 80vh;
+  font-size: 12px;
+  padding-bottom: 100px;
+}
+.btns-menu-content {
+  padding-bottom: 10px;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  background: #FFF;
+  z-index: 9;
+}
+.btns-menu-content .A-shortcut {
+  width: 100%;
+  overflow-y: scroll;
+}
+.btns-menu-content .A-shortcut .ul {
+  white-space: nowrap;
+  display: flex;
+  background-color: #F7F7F7;
+  font-size: 15px;
+}
+.btns-menu-content .A-shortcut .ul li {
+  padding: 10px 15px;
+  background-color: #F7F7F7;
+  text-align: center;
+}
+.btns-menu-content .btns {
+  display: flex;
+  padding: 10px 15px;
+}
+.btns-menu-content .btns button {
+  margin-right: 15px;
+}
+.CodeMirror {
+  border: 1px solid #eee;
+  height: 80vh;
+}

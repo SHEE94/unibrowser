@@ -1,0 +1,18 @@
+@import url(http://at.alicdn.com/t/font_2480200_9j680e6hv4h.css);
+.more-list {
+  position: absolute;
+  background: #ffffff;
+  color: #515151;
+  -webkit-box-shadow: 0 0 20rpx 2rpx #c0c0c0;
+          box-shadow: 0 0 20rpx 2rpx #c0c0c0;
+  width: 120px;
+  border-radius: 5px;
+  padding: 15px;
+  top: 70px;
+  right: 10rpx;
+}
+.more-list .btn {
+  color: #515151;
+  padding: 20rpx;
+}
+

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport"
+			content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="./css/index.css" />
+		<script src="../codeedit/js/uni.webview.1.5.2.js" type="text/javascript" charset="utf-8"></script>
+		<title></title>
+	</head>
+	<body>
+		<div class="search-content">
+			<input type="text" name="search" id="search" value="" />
+			<div class="history">
+				<div class="btns">
+					<div class="clear-history">
+						清除
+					</div>
+					<view class="history-content">
+
+					</view>
+
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript">
+		window.onload = function() {
+			var history = window.localStorage.searchHistory || '[]';
+			var historyContent = document.querySelector('.history-content')
+			
+			var setHistory = function() {
+				history = JSON.parse(history)
+				var str = ''
+				for (var i = 0; i < history.length; i++) {
+					str += '<div class="history-tag">' + history[i] + '</div>';
+				}
+				console.log(str)
+				historyContent.innerHTML = str;
+			}
+			setHistory()
+			
+			var search = document.querySelector('#search')			
+			document.onkeyup = function(e) {
+				if (e.keyCode == 13 && document.activeElement.id == 'search') {
+					var val = search.value;
+					history.unshift(val)
+					window.localStorage.searchHistory = JSON.stringify(history)
+					uni.navigateTo({
+						url:'/pages/browser/browser?url='+val
+					})
+				}
+			}
+
+			document.querySelector('.clear-history').onclick = function() {
+				window.localStorage.removeItem('searchHistory');
+				historyContent.innerHTML = ''
+			}
+		}
+	</script>
+</html>

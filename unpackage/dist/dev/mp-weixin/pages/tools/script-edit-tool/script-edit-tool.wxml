@@ -1,0 +1,1 @@
+<view><web-view src="/static/html/codeedit/index.html" data-event-opts="{{[['message',[['message',['$event']]]]]}}" bindmessage="__e"></web-view></view>

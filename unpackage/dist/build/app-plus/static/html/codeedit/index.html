@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport"
+			content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>脚本编辑器</title>
+		<script src="js/mui.min.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" type="text/css" href="lib/codemirror.css" />
+		<link rel="stylesheet" type="text/css" href="css/index.css" />
+		<link rel="stylesheet" type="text/css" href="addon/hint/show-hint.css" />
+		<link rel="stylesheet" type="text/css" href="theme/material.css" />
+		<script src="lib/codemirror.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript" charset="utf-8">
+			mui.init({
+				keyEventBind: {
+					backbutton: false //关闭back按键监听
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<div>
+			<textarea id="commands">(function(){
+	//code
+	console.log('hello world!')
+})()</textarea>
+			<div class="btns-menu-content">
+				<div class="A-shortcut">
+					<ul class="ul">
+						<li data-type="select" data-sel="Revoke" class="Revoke">撤销</li>
+						<li data-type="select" data-sel="Redo" class="Redo">重做</li>
+						<!-- <li class="selectAll">全选</li> -->
+						<li data-type="select" data-sel="clearAll" class="clearAll">清空</li>
+					</ul>
+				</div>
+				<div class="btns">
+					<button type="button" data-loading-icon-position="right" class="mui-btn" id="init">初始化</button>
+					<!-- <button type="button" data-loading-icon-position="right" class="mui-btn" id="execute">关闭</button> -->
+					<button id='savedb' class="button">保存</button>
+					<button id='test-webview' class="button">在网页中调式</button>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script type="text/javascript" src="js/uni.webview.1.5.2.js"></script>
+	<script src="js/setting.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/jsonformat.js"></script>
+	<script src="mode/javascript/javascript.js"></script>
+	<script src="addon/hint/show-hint.js" type="text/javascript" charset="utf-8"></script>
+	<script src="addon/hint/javascript-hint.js" type="text/javascript" charset="utf-8"></script>
+	<script src="js/app.js"></script>
+
+</html>

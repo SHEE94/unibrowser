@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title></title>
+	</head>
+	<style type="text/css">
+		.content {
+			height: 100vh;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+		}
+	</style>
+	<body>
+		<div class="content">
+			<strong>无法访问此网站</strong>
+			<p>ERR_ADDRESS_UNREACHABLE</p>
+			<button type="button" onclick="back()" style="width: 120px; line-height: 2;">返回</button>
+		</div>
+	</body>
+	<script>
+		document.addEventListener("error", function(e) {
+			var url = e.url; // 错误页面的url地址  
+			var href = e.href; // 错误页面的完整路径（包括完整的协议头）  
+			console.log('err', e)
+		}, false);
+		function back(){
+			history.back()
+		}
+	</script>
+</html>

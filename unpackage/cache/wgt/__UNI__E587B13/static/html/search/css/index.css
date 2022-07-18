@@ -1,0 +1,38 @@
+*{
+	margin: 0;
+	padding: 0;
+	font-size: 62.5%;
+}
+.search-content{
+	padding-top: 5rem;
+}
+#search{
+	width: 80%;
+	height: 4.4rem;
+	border: none;
+	background: #eee;
+	border-radius: 8px;
+	display: block;
+	margin: 0 auto;
+	padding: 0 1.5rem;
+}
+.btns{
+	overflow: hidden;
+	padding:1.5rem 3rem;
+}
+.clear-history{
+	background: #eee;
+	float: right;
+	padding: .8rem 1.5rem;
+	border-radius: .4rem;
+}
+.history-content{
+	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+}
+.history-tag{
+	padding: .8rem;
+	background: #eee;
+	margin: 1.5rem;
+}

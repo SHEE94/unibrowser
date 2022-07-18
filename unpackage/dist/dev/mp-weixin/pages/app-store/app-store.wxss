@@ -1,0 +1,47 @@
+.app-content {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+          flex-direction: column;
+  padding: 15px;
+  padding-top: 40px;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+.app-content .title {
+  padding-bottom: 15px;
+  background-color: #fff;
+  border-bottom: 1px solid #CCCC77;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+.app-content .app-row {
+  width: 100%;
+  margin-bottom: 15px;
+}
+.app-content .app-row .app-col {
+  width: 50px;
+  height: 80px;
+  float: left;
+  margin: 10px;
+}
+.app-content .app-row .app-col .preview {
+  width: 50px;
+  background-color: #eee;
+  height: 50px;
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+.app-content .app-row .app-col .name {
+  font-size: 12px;
+  width: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+

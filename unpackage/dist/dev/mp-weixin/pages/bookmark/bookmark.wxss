@@ -1,0 +1,30 @@
+.content {
+  min-height: 100vh;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  background-color: #EEEEEE;
+  padding: 30rpx;
+}
+.content .bookmark-list {
+  background-color: #f7f7f7;
+  margin-bottom: 30rpx;
+  padding: 15rpx 30rpx;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.content .bookmark-list .title {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.content .bookmark-list .url {
+  color: #ccc;
+  font-size: 25rpx;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+

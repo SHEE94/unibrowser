@@ -1,0 +1,10 @@
+{
+  "navigationStyle": "custom",
+  "navigationBarTitleText": "",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "menu-call": "/components/menu/menu",
+    "more-menu": "/components/moremenu/moremenu",
+    "bg-window": "/components/bgwindow/bgwindow"
+  }
+}

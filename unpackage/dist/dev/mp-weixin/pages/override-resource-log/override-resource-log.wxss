@@ -1,0 +1,31 @@
+.list {
+  width: 100%;
+  border-bottom: 1px solid #cccc77;
+  padding: 15rpx 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.defaultbtn {
+  float: right;
+  padding: 8rpx 15rpx;
+  line-height: 1.2;
+  font-size: 26rpx;
+  border-radius: 4rpx;
+  border: 1px solid #ccc;
+  margin-left: 10rpx;
+}
+.pop-btns {
+  position: absolute;
+  bottom: 30rpx;
+  width: 80%;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-justify-content: space-around;
+          justify-content: space-around;
+  font-size: 35rpx;
+}
+

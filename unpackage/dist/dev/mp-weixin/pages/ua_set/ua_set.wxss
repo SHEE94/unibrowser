@@ -1,0 +1,5 @@
+.ua-list {
+  padding: 30rpx;
+  margin-top: 40rpx;
+}
+

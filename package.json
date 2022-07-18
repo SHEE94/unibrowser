@@ -1,0 +1,14 @@
+{
+  "name": "unibrowser",
+  "version": "1.0.0",
+  "description": "一个使用uniapp开发的浏览器应用",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "浏览器"
+  ],
+  "author": "Xianxu",
+  "license": "MIT"
+}

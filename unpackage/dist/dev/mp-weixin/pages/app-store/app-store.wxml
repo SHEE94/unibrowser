@@ -1,0 +1,1 @@
+<view><view class="app-content"><view class="title">精选应用</view><unicloud-db generic:scoped-slots-default="app-store-unicloud-db-default" data-vue-generic="scoped" vue-id="1a5aee58-1" collection="apps" bind:__l="__l" vue-slots="{{['default']}}"></unicloud-db></view></view>

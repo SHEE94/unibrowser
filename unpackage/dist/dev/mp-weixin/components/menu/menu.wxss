@@ -1,0 +1,21 @@
+.menu-content .list-content {
+  position: fixed;
+  width: 50%;
+  background: #ffffff;
+  padding: 30rpx;
+  border-radius: 5px;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  -webkit-box-shadow: 0 0 20rpx 2rpx #c0c0c0;
+          box-shadow: 0 0 20rpx 2rpx #c0c0c0;
+}
+.menu-content .list-content .btn {
+  color: #515151;
+  padding: 20rpx;
+}
+.menu-content .list-content .btn:nth-last-child(1) {
+  border-bottom: none;
+}
+
