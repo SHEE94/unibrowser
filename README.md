@@ -8,4 +8,5 @@
 ### 后续
 之后有更新的话会在github上更新
 
-[GITHUB](https://github.com/SHEE94/unibrowser)
+[GITHUB源码](https://github.com/SHEE94/unibrowser)
+[酷安下载](https://www.coolapk.com/apk/script.browser)
