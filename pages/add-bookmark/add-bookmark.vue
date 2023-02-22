@@ -93,13 +93,13 @@
 	.content{
 		background-color: #EEEEEE;
 		min-height: 100vh;
-		padding: 30upx;
+		padding: 15px;
 		box-sizing: border-box;
 	}
 .list{
-	padding: 15upx 30upx;
+	padding: 7px 15px;
 	background-color: #f7f7f7;
-	margin-bottom: 30upx;
+	margin-bottom: 15px;
 	display: flex;
 	overflow: hidden;
 	white-space: nowrap;
@@ -109,10 +109,10 @@
 		width: 100%;
 	}
 	button{
-		width: 280upx;
-		height: 80upx;
-		line-height: 80upx;
-		font-size: 28upx;
+		width: 140px;
+		height: 40px;
+		line-height: 40px;
+		font-size: 14px;
 	}
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<view v-if="bookmark.length == 0" style="top: 80upx;color: #666666;font-size: 28upx;text-align: center;width: 100%;">
+		<view v-if="bookmark.length == 0" style="top: 40px;color: #666666;font-size: 28upx;text-align: center;width: 100%;">
 			空空如也
 		</view>
 		<view class="bookmark-list" @click="tohere" :data-index="index" :data-url="item.url" @longpress="edit" v-for="(item,index) in bookmark" :key="index">
@@ -26,9 +26,9 @@
 		},
 		methods:{
 			tohere(e){
-				uni.$emit('BOOK-MARK',{url:e.currentTarget.dataset.url})
+				// uni.$emit('BOOK-MARK',{url:e.currentTarget.dataset.url})
 				if(this.from == 'home'){
-					uni.reLaunch({
+					uni.redirectTo({
 						url:'/pages/browser/browser',
 						success() {
 							uni.$emit('BOOK-MARK',{url:e.currentTarget.dataset.url})
@@ -36,8 +36,11 @@
 					})
 					return;
 				}
-				
-				uni.navigateBack()
+				uni.navigateBack({
+					success:()=>{
+						uni.$emit('BOOK-MARK',{url:e.currentTarget.dataset.url})
+					}
+				})
 			},
 			edit(e){
 				let index = e.currentTarget.dataset.index;
@@ -72,11 +75,11 @@
 	min-height: 100vh;
 	box-sizing: border-box;
 	background-color: #EEEEEE;
-	padding:30upx;
+	padding:15px;
 	.bookmark-list{
 		background-color: #f7f7f7;
-		margin-bottom: 30upx;
-		padding: 15upx 30upx;
+		margin-bottom: 15px;
+		padding: 7px 15px;
 		box-sizing: border-box;
 		overflow: hidden;
 		white-space: nowrap;
@@ -88,7 +91,7 @@
 		}
 		.url{
 			color: #ccc;
-			font-size: 25upx;
+			font-size: 12px;
 			overflow: hidden;
 			white-space: nowrap;
 			text-overflow: ellipsis;

@@ -4,53 +4,63 @@
 			<view class="title">
 				精选应用
 			</view>
-			<unicloud-db v-slot:default="{data, loading, error, options}" collection="apps">
-				<view v-if="loading" style="padding: 15px; text-align: center;">正在更新</view>
-				<view v-if="error">{{error.message}}</view>
-				<view v-else>
-					<scroll-view scroll-y="true" style="height: 78vh;">
-						<view>
-							<view class="app-row">
-								<navigator class="app-col" v-for="(item, index_2) in data" :key="index_2" :url="'/pages/browser/browser?url='+item.url">							
-									<image :src="item.img?item.img:item.imgUrl" mode="aspectFill" class="preview"></image>
-									<view class="name">{{item.title}}</view>
-								</navigator>
-							</view>
-						</view>
-					</scroll-view>
-					
-				</view>
-			</unicloud-db>
 			
 		</view>
 	</view>
 </template>
 
 <script>
-	import db from '@/utils/db.js'
+import db from '@/utils/db.js';
 export default {
 	data() {
 		return {
-			list:[
+			tabCurrent:0,
+			id:'',
+			scrollleft:0,
+			list: [
 				{
-					cate:'4399',
-					list:[
+					cate: '4399',
+					list: [
 						{
-							title:'大大的',
-							privew:'',
-							url:'http://szhong.4399.com/4399swf/upload_swf/ftp34/liuxinyu/20201221/1/gameIndex.html'
+							title: '大大的',
+							privew: '',
+							url: 'http://szhong.4399.com/4399swf/upload_swf/ftp34/liuxinyu/20201221/1/gameIndex.html'
 						}
 					]
 				}
 			]
 		};
 	},
-	onLoad() {
-		db.get('apps').then(data=>{
-			
-		})
+
+	activated() {
+		this.$refs.dataref.loadMore()
 	},
-	methods: {}
+	
+	methods: {
+		
+		handleLoad(data, ended, pagination){
+			this.dataList = data
+			this.id = data[this.tabCurrent]._id
+			console.log(data, ended, pagination)
+		},
+		changeTab(index){
+			let fqa = uni.getStorageSync('app-fqa');
+			if(!fqa){
+				setTimeout(()=>{
+					this.scrollleft = 1000
+					setTimeout(()=>{
+						this.scrollleft = 0
+					},500)
+				},500)
+				uni.setStorageSync('app-fqa',true);
+			}
+			this.tabCurrent = index;
+			this.id = this.dataList[index]._id
+		},
+		scrolltolower(){
+			this.$refs.dataref.loadMore()
+		}
+	}
 };
 </script>
 
@@ -59,27 +69,37 @@ export default {
 	display: flex;
 	flex-direction: column;
 	padding: 15px;
-	padding-top: 40px;
+	padding-top: 60px;
 	box-sizing: border-box;
-	.title{
+	.title {
 		padding-bottom: 15px;
 		background-color: #fff;
-		border-bottom: 1px solid #CCCC77;
+		border-bottom: 1px solid #ECAD9E;
 		margin-bottom: 15px;
 		font-weight: bold;
 	}
+	.tab-bar {
+		white-space: nowrap;
+		.tab {
+			display: inline-block;
+			
+			margin: 0 10px;
+		}
+	}
 	.app-row {
 		width: 100%;
-		// display: flex;
-		// justify-content: space-between;
-		// align-items: center;
 		margin-bottom: 15px;
-		// flex-wrap: wrap;
+		display: flex;
+		justify-content: stretch;
+		flex-wrap: wrap;
+		align-content: space-around;
 		.app-col {
-			width: 50px;
+			width: 20%;
 			height: 80px;
-			float: left;
-			margin: 10px;
+			margin: 10px 0;
+			display: flex;
+			align-items: center;
+			flex-direction: column;
 			.preview {
 				width: 50px;
 				background-color: #eee;
@@ -88,7 +108,7 @@ export default {
 				overflow: hidden;
 			}
 			.name {
-				font-size: 12px;
+				font-size: 11px;
 				width: 50px;
 				overflow: hidden;
 				text-overflow: ellipsis;

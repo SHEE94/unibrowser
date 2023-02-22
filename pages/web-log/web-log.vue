@@ -26,7 +26,7 @@ export default {
 		};
 	},
 	mounted() {
-		this.settingConfig = uni.getStorageSync('settingConfig');
+		this.settingConfig = uni.getStorageSync('settingConfig')||{};
 		console.log(this.settingConfig )
 	},
 	methods: {
@@ -122,11 +122,11 @@ export default {
 		},
 		showAll() {
 			if(!this.Resource)return;
-			this.showRes = [...this.Resource.js, ...this.Resource.css, ...this.Resource.img, ...this.Resource.iframe];
+			this.showRes = [...this.Resource.js, ...this.Resource.css, ...this.Resource.img, ...this.Resource.iframe,...this.Resource.video];
 		}
 	},
 	onLoad() {
-		this.Resource = app.globalData.LoadResource;
+		this.Resource = app.globalData.LoadResource||{ js: [], css: [], img: [], iframe: [], video: [] };
 		this.showAll();
 	}
 };
@@ -134,33 +134,33 @@ export default {
 
 <style lang="less">
 .content {
-	padding: 30upx;
+	padding: 15px;
 	box-sizing: border-box;
 }
 .header{
 	display: flex;
 	flex-direction: row-reverse;
 	.navi{
-		border: 1px solid #CCCC77;
-		padding: 10upx 15upx;
-		margin-bottom: 30upx;
+		border: 1px solid #ECAD9E;
+		padding: 5px 7px;
+		margin-bottom: 15px;
 	}
 }
 .pick {
 	width: 100%;
-	border: 1px solid #cccc77;
+	border: 1px solid #ECAD9E;
 	text-align: center;
 }
 .list {
 	width: 100%;
-	border-bottom: 1px solid #cccc77;
-	padding: 15upx 0;
+	border-bottom: 1px solid #ECAD9E;
+	padding: 7px 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
 .bar{
-		padding: 15upx 50upx;
-		margin-bottom: 30upx;
+		padding: 7px 25px;
+		margin-bottom: 15px;
 		display: flex;
 		justify-content: flex-end;
 		box-sizing: border-box;

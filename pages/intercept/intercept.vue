@@ -2,13 +2,16 @@
 	<view class="inter-content">
 		<view class="defaultbtn" @tap="clearALL">清空所有</view>
 		<view class="defaultbtn" @tap="toOverriurl">跳转拦截规则</view>
+		<view class="defaultbtn" @tap="addUrl">添加拦截域名</view>
 		<uni-list>
 		    <uni-list-item :title="item.hostname" :note="item.classList.join(',')" v-for="(item,index) in adList" :clickable="true" :key="index" @click="del(index)"></uni-list-item>
 		</uni-list>
+		
 	</view>
 </template>
 
 <script>
+	const app = getApp()
 	export default {
 		data() {
 			return {
@@ -37,8 +40,14 @@
 				uni.navigateTo({
 					url:'overrideUrl/overrideUrl'
 				})
-			}
+			},
+			addUrl(){
+				uni.navigateTo({
+					url:'/pages/overrideUrl/overrideUrl'
+				})
+			},
 		},
+		
 		mounted() {
 			this.adList = uni.getStorageSync('adList')||[]
 		}
@@ -47,17 +56,17 @@
 
 <style>
 	.inter-content{
-		padding: 30upx;
+		padding: 15px;
 	}
 .defaultbtn{
-	padding: 8upx 15upx;
+	padding: 4px 7px;
 	text-align: center;
-	width: 150upx;
-	margin: 30upx;
+	width: 80px;
+	margin: 15px;
 	line-height: 1.2;
-	font-size: 26upx;
+	font-size: 13px;
 	border-radius: 4upx;
 	border: 1px solid #ccc;
-	margin-left: 10upx;
+	margin-left: 5px;
 }
 </style>

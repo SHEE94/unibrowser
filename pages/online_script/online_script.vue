@@ -5,7 +5,6 @@
 				<template slot="footer">
 					<view class="install-btn">
 						<view class="btn" @click="install(item.url,index)" v-if="!item.install&&!item.update">安装</view>
-						
 						<view class="btn" style="background: #eee;border: #ccc;" v-if="item.install">已安装</view>
 					</view>
 				</template>
@@ -24,13 +23,11 @@ export default {
 	onLoad() {
 		this.list = uni.getStorageSync('onlineScript')||[];
 		this.installOnlineScript = uni.getStorageSync('installOnlineScript')||[];
-		
 		this.list.forEach((a,index)=>{
 			this.installOnlineScript.forEach(b=>{
 				if(a._id == b._id){
 					a.install = true;
 				}
-				
 				if(a.name == b.name&&a._id != b._id){
 					console.log(a,b)
 					a.update = true;
@@ -42,12 +39,9 @@ export default {
 	methods: {
 		
 		install(url,index) {
-			console.log(url)
-			
 			uni.showLoading({
 				title: '正在安装'
 			});
-			
 			uni.downloadFile({
 				url: url,
 				success: res => {

@@ -46,7 +46,7 @@
 
 <style lang="less">
 .ua-list{
-	padding: 30upx;
-	margin-top: 40upx;
+	padding: 15px;
+	margin-top: 20px;
 }
 </style>

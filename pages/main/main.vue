@@ -29,8 +29,9 @@
 							:adjust-position="false"
 							:auto-focus="false"
 						/>
+						<image src="../../static/scan.png" class="searchicon" mode="aspectFit" @click="scanQR"></image>
 					</view>
-					<scroll-view scroll-y="true" style=" margin-top: 30upx;padding-bottom: 80upx;">
+					<scroll-view scroll-y="true" style=" margin-top: 15px;padding-bottom: 40px;">
 						<view class="scroll-content">
 							<view @longpress="edit(index)" class="web-card" v-for="(item, index) in homebookmark" :key="index" @click="tosetting('/pages/browser/browser?url=' + item.url)">
 								<image :src="item.ico" mode="aspectFill" class="banner"></image>
@@ -41,29 +42,25 @@
 				</view>
 			</swiper-item>
 			<swiper-item>
-				<view class="swiper-item"><uni-app-store></uni-app-store></view>
+				<view class="swiper-item"><uni-app-store ref="apps"></uni-app-store></view>
 			</swiper-item>
 		</swiper>
 		<view class="home-bar" v-if="!hideBar">
 			<view data-target="back" @tap="topage(0)"><text class="iconfont icon-liebiao1"></text></view>
 			<view data-target="forward" @tap="topage(2)"><text class="iconfont icon-yingyongzhongxin"></text></view>
 			<view data-target="home" @tap="topage(1)"><text class="iconfont icon-home"></text></view>
-			<navigator url="/pages/setting/setting?from=home"><text class="iconfont icon-more"></text></navigator>
+			<view @click="tohere('./setting_in_main/setting_in_main')"><text class="iconfont icon-more"></text></view>
 		</view>
 	</view>
 </template>
 
 <script>
-import footerbar from '../../components/footerbar.vue';
-import menuwindow from '../../components/menuwindow.vue';
 import uniNew from '../news-list/news-list.vue';
 import uniAppStore from '../app-store/app-store.vue';
 
 const app = getApp();
 export default {
 	components: {
-		footerBar: footerbar,
-		menuWindow: menuwindow,
 		uniNew: uniNew,
 		uniAppStore: uniAppStore
 	},
@@ -78,12 +75,17 @@ export default {
 	},
 	onShow() {
 		app.globalData.LoadResource = []
-		this.homebookmark = uni.getStorageSync('homebookmark');
+		this.homebookmark = uni.getStorageSync('homebookmark')||[];
+		console.log(this.homebookmark)
 		if(typeof this.homebookmark == 'string'){
 			this.homebookmark = JSON.parse(this.homebookmark)
 		}
 	},
 	onLoad() {
+		plus.navigator.closeSplashscreen()
+		this.currentWebview = this.$scope.$getAppWebview();
+		this.stoppuu(false) 
+		
 		uni.onKeyboardHeightChange(res => {
 			console.log(res.height);
 			if (res.height > 100) {
@@ -93,6 +95,15 @@ export default {
 			}
 		});
 	},
+	onReady() {
+		plus.navigator.closeSplashscreen()
+	},
+	onPullDownRefresh() {
+		this.$refs.apps.scrolltolower()
+		setTimeout(()=>{
+			uni.stopPullDownRefresh()
+		},1500)
+	},
 	onBackPress() {
 		if (this.current == 0 || this.current == 2) {
 			this.current = 1;
@@ -100,6 +111,18 @@ export default {
 		}
 	},
 	methods: {
+		scanQR(e){
+			uni.scanCode({
+				success: (res) => {
+					console.log(res)
+					let result = res.result;
+					uni.navigateTo({
+						url:'../browser/browser?url='+result,
+						animationType:'fade-in'
+					})
+				}
+			})
+		},
 		edit(index){
 			uni.showModal({
 				content:'是否删除',
@@ -111,8 +134,21 @@ export default {
 				}
 			})
 		},
+		stoppuu(isSupport){
+			this.currentWebview.setStyle({
+			  pullToRefresh: {  
+			    support: isSupport,  
+			    style: plus.os.name === 'Android' ? 'circle' : 'default'  
+			  }  
+			});
+		},
 		swiperChang(e) {
 			this.current = e.detail.current;
+			if(this.current == 2){
+				this.stoppuu(true)
+			}else{
+				this.stoppuu(false)
+			}
 		},
 		topage(index) {
 			this.current = index;
@@ -134,10 +170,15 @@ export default {
 			//   console.log(res.height)
 			// })
 		},
+		tohere(url){
+			uni.navigateTo({
+				url:url
+			})
+		},
 		search(e) {
 			let val = e.detail.value;
 			uni.navigateTo({
-				url: '../browser/browser?url=' + val,
+				url: '/pages/browser/browser?url=' + val,
 				animationType: 'fade-in'
 			});
 		}
@@ -169,12 +210,12 @@ export default {
 	border-style: solid;
 	margin: 0 auto;
 	border-color: #cccccc;
-	border-radius: 10upx;
-	margin-top: 100upx;
-	padding-left: 20upx;
-	padding-right: 20upx;
-	padding-top: 10upx;
-	padding-bottom: 10upx;
+	border-radius: 5px;
+	margin-top: 50px;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
 }
 .searchicon {
 	width: 20px;

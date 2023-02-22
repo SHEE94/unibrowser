@@ -1,5 +1,6 @@
 <template>
 	<view class="content">
+		<view>当前版本：{{version}}</view>
 		<rich-text :nodes="node"></rich-text>
 	</view>
 </template>
@@ -10,11 +11,16 @@
 	export default {
 		data() {
 			return {
+				version:'1.0.0',
 				node:[]
 			};
 		},
 		onLoad() {
 			this.getdata()
+			let that = this;
+			plus.runtime.getProperty(plus.runtime.appid, function(widgetInfo) {
+				that.version = widgetInfo.version
+			})
 		},
 		methods:{
 			async getdata(){

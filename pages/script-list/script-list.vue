@@ -9,19 +9,22 @@
 			<view class="arr"><icon :type="item.active ? 'success' : 'cancel'" size="20"></icon></view>
 		</view>
 		
-		<view style="padding: 30upx;background-color: #F7F7F7;margin-top: 30upx;border-bottom: 1px solid #CCCC77;" v-if="scriptList.length > 0">自定义脚本</view>
+		<view style="padding: 15px;background-color: #F7F7F7;margin-top: 15px;border-bottom: 1px solid #CCCC77;" v-if="scriptList.length > 0">自定义脚本</view>
 		<view class="list" v-for="(item, index) in scriptList" :key="index" :data-index="index" @click="showmodal">
 			<view class="left-info">
 				<view class="label">{{ item.name }}</view>
 			</view>
 			<view class="arr"><icon :type="item.active ? 'success' : 'cancel'" size="20"></icon></view>
 		</view>
-		<view style="padding: 30upx;background-color: #F7F7F7;margin-top: 30upx;border-bottom: 1px solid #CCCC77;" v-if="script_dir_file.length > 0">本地脚本</view>
+		<view style="padding: 15px;background-color: #F7F7F7;margin-top: 15px;border-bottom: 1px solid #CCCC77;" v-if="script_dir_file.length > 0">本地脚本</view>
 		<view class="list" v-for="(s_self, index_2) in script_dir_file" :key="'v-' + index_2" :data-index="index_2" @click="changeScriptFile">
 			<view class="left-info">
 				<view class="label">{{ s_self.filename }}</view>
 			</view>
 			<view class="arr"><icon :type="s_self.active ? 'success' : 'cancel'" size="20"></icon></view>
+		</view>
+		<view style="font-size: 11px;color: #ccc;text-align: center;padding: 20px;">
+			脚本虽好，可不要贪多哦
 		</view>
 	</view>
 </template>
@@ -111,7 +114,7 @@ export default {
 
 <style lang="less">
 .content {
-	padding: 30upx 15upx;
+	padding: 15px 7px;
 	background-color: #eeeeee;
 	min-height: 100vh;
 	box-sizing: border-box;
@@ -119,18 +122,18 @@ export default {
 
 .list {
 	display: flex;
-	margin-bottom: 20upx;
+	margin-bottom: 10px;
 	align-items: center;
 	justify-content: space-between;
-	padding: 15upx 20upx;
+	padding: 7px 10px;
 	background-color: #f7f7f7;
 	.left-info {
 		display: flex;
 		align-items: center;
 		.icon {
-			margin-right: 10upx;
-			font-size: 30upx;
-			margin-bottom: -5upx;
+			margin-right: 5px;
+			font-size: 15px;
+			margin-bottom: -2px;
 		}
 	}
 	.arr {

@@ -62,22 +62,27 @@
 
 <style lang="less">
 .content{
-	padding:60upx 30upx 30upx;
+	padding:30px 15px 15px;
 	box-sizing: border-box;
 }
 .search-history{
 	display: flex;
 	flex-wrap: wrap;
+	width: 100%;
+	overflow-x: hidden;
 	.tag{
-		padding: 8upx 10upx;
-		margin: 20upx;
+		padding: 4px 5px;
+		margin: 10px;
 		background-color: #eee;
-		border-radius: 4upx;
+		border-radius: 2px;
+		max-width: 300px;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 }
 .bar{
-		padding: 15upx 50upx;
-		margin-bottom: 30upx;
+		padding: 7px 25px;
+		margin-bottom: 15px;
 		display: flex;
 		justify-content: flex-end;
 		box-sizing: border-box;

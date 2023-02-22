@@ -1,144 +1,319 @@
 <template>
 	<view class="content">
 		<view class="list">
-			<view class="left-info">				
-				<view class="label">开启下拉刷新</view>
-			</view>
-			<view class="arr">
-				<switch :checked="settingConfig.pullLoad" @change="changePullload" />
-			</view>
+			<view class="left-info"><view class="label">开启下拉刷新</view></view>
+			<view class="arr"><switch :checked="settingConfig.pullLoad" @change="changePullload" /></view>
 		</view>
 		<view class="list">
-			<view class="left-info">				
-				<view class="label">开启嗅探日志</view>
-			</view>
-			<view class="arr">
-				<switch :checked="settingConfig.resLog" @change="changeLog" />
-			</view>
+			<view class="left-info"><view class="label">开启嗅探日志</view></view>
+			<view class="arr"><switch :checked="settingConfig.resLog" @change="changeLog" /></view>
 		</view>
-		
 		<view class="list">
-			<view class="left-info">				
-				<view class="label">使用系统播放器</view>
-			</view>
+			<view class="left-info"><view class="label">使用系统播放器</view></view>
+			<view class="arr"><switch :checked="settingConfig.videoPLay" data-type="videoPLay" @change="change" /></view>
+		</view>
+		<view class="list">
+			<view class="left-info"><view class="label">下载设置</view></view>
 			<view class="arr">
-				<switch :checked="settingConfig.videoPLay" data-type="videoPLay" @change="change" />
+				<picker mode="selector" :range="downloadType" @change="changedownloadType">
+					<view style="padding: 0 10px;color: #525252;font-size: 14px;">{{ downloadType[settingConfig.downloadCurrent] }}</view>
+				</picker>
 			</view>
 		</view>
-		
-		<navigator open-type="redirect" :url="'../bookmark/bookmark?from='+from" class="list">
+		<!-- <view class="list">
+			<view class="left-info"><view class="label">开启左右切换窗口</view></view>
+			<view class="arr"><switch :checked="settingConfig.switchWindow" @change="switchWindow" /></view>
+		</view> -->
+		<view class="list" v-for="(item, index) in menuList" :key="index" :data-key="item.key" :data-to="item.to" @click="tohere">
 			<view class="left-info">
-				<view class="label">书签</view>
-			</view>
-			<view class="arr iconfont icon-right"></view>
-		</navigator>
-		
-		<view class="list" v-for="(item,index) in menuList" :key="index" :data-key="item.key" :data-to="item.to" @click="tohere">
-			<view class="left-info">
-				
-				<view class="label">{{item.name}}</view>
+				<view class="label">{{ item.name }}</view>
 			</view>
 			<view class="arr iconfont icon-right"></view>
 		</view>
-		
+		<view class="list" @click="checkupdate">
+			<view class="left-info"><view class="label">检查更新</view></view>
+			<view class="arr iconfont icon-right"></view>
+		</view>
+		<view class="list" @click="reset">
+			<view class="left-info"><view class="label">恢复默认</view></view>
+			<view class="arr iconfont icon-right"></view>
+		</view>
+
+		<uni-popup ref="popup" type="center">
+			<uni-popup-dialog
+				mode="base"
+				:title="updatainfo.title"
+				:content="updatainfo.contents + '\n版本：' + updatainfo.version"
+				:duration="2000"
+				:before-close="true"
+				@close="close"
+				@confirm="confirm"
+			></uni-popup-dialog>
+		</uni-popup>
 	</view>
 </template>
 
 <script>
+const app = getApp();
+import update from '@/uni_modules/uni-upgrade-center-app/utils/check-update';
 export default {
 	data() {
 		return {
-			settingConfig:{
-				pullLoad:false,
-				videoPLay:false,
-				canvas:false,
-				resLog:false,
-				arm:220
+			updatainfo: {
+				title: '',
+				contents: '',
+				version: ''
 			},
-			menuList:[
-				
+			settingConfig: {
+				pullLoad: false,
+				videoPLay: false,
+				canvas: false,
+				resLog: false,
+				switchWindow: false,
+				arm: 220,
+				downloadCurrent: 0
+			},
+			downloadType: ['系统下载器', 'ADM下载器', 'IDM+下载器'],
+			menuList: [
 				{
-					icon:'icon-shuqian',
-					name:'网络日志',
-					to:'/pages/web-log/web-log',
-					key:'web-log'
+					icon: 'icon-shuqian',
+					name: '嗅探日志',
+					to: '/pages/web-log/web-log',
+					key: 'web-log'
 				},
 				{
-					icon:'icon-shuqian',
-					name:'拦截',
-					to:'/pages/intercept/intercept',
-					key:'intercept'
+					icon: 'icon-shuqian',
+					name: '拦截',
+					to: '/pages/intercept/intercept',
+					key: 'intercept'
 				},
 				{
-					icon:'icon-shuqian',
-					name:'UserAgent设置',
-					to:'/pages/ua_set/ua_set',
-					key:'ua_set'
+					icon: 'icon-shuqian',
+					name: 'UA设置',
+					to: '/pages/ua_set/ua_set',
+					key: 'ua_set'
+				},
+
+				{
+					icon: 'icon-shuqian',
+					name: '隐私',
+					to: '/pages/privacy/privacy',
+					key: 'privacy'
 				},
 				{
-					icon:'icon-shuqian',
-					name:'工具',
-					to:'/pages/tools/tools',
-					key:'/pages/tools/tools'
+					icon: 'icon-shuqian',
+					name: '工具',
+					to: '/pages/tools/tools',
+					key: '/pages/tools/tools'
 				},
 				{
-					icon:'icon-shuqian',
-					name:'帮助',
-					to:'/pages/help/help',
-					key:'help'
+					icon: 'icon-shuqian',
+					name: '帮助',
+					to: '/pages/help/help',
+					key: 'help'
 				},
 				{
-					icon:'icon-shuqian',
-					name:'关于',
-					to:'/pages/about/about',
-					key:'about'
-				},
+					icon: 'icon-shuqian',
+					name: '关于',
+					to: '/pages/about/about',
+					key: 'about'
+				}
 			],
-			from:null
+			from: null
 		};
 	},
 	onLoad(options) {
-		if(options.from){
-			this.from = options.from
+		if (options.from) {
+			this.from = options.from;
 		}
-		let settingConfig = uni.getStorageSync('settingConfig')
-		if(settingConfig){
+		let settingConfig = uni.getStorageSync('settingConfig');
+		if (settingConfig) {
 			this.settingConfig = settingConfig;
 			// uni.removeStorageSync('settingConfig')
 		}
 	},
+	onShow() {
+		let settingConfig = uni.getStorageSync('settingConfig');
+		if (settingConfig) {
+			this.settingConfig = settingConfig;
+			// uni.removeStorageSync('settingConfig')
+		}
+	},
+	onHide() {
+		uni.setStorageSync('settingConfig', this.settingConfig);
+	},
 	onUnload() {
-		uni.setStorageSync('settingConfig',this.settingConfig)
+		uni.setStorageSync('settingConfig', this.settingConfig);
 	},
 	methods: {
-		tohere(e){
-			let key = e.currentTarget.dataset.key,
-			to = e.currentTarget.dataset.to;
-			uni.navigateTo({
-				url:to
-			})
+		reset() {
+			uni.removeStorageSync('settingConfig');
+			this.settingConfig = app.globalData.settingConfig;
+			uni.showToast({
+				icon: 'success',
+				title: '已恢复默认设置'
+			});
+			setTimeout(() => {
+				uni.navigateBack({});
+			}, 1500);
 		},
-		changePullload(e){
+		// 选择下载器
+		changedownloadType(e) {
+			let val = e.detail.value;
+			this.settingConfig.downloadCurrent = val;
+			if (val == 1) {
+				let isInstallADM = plus.runtime.isApplicationExist({ pname: 'com.dv.adm.pay' });
+				if (!isInstallADM) {
+					uni.showModal({
+						icon: 'none',
+						title: '你的手机似乎未安装ADM Pro,是否现在下载',
+						success: res => {
+							if (res.confirm) {
+								uni.showLoading({
+									title: '下载中'
+								});
+								uni.downloadFile({
+									url: 'https://aa-minprogram.oss-cn-beijing.aliyuncs.com/script/ADM%20Pro.apk',
+									success: e => {
+										uni.hideLoading();
+										let tempFilePath = e.tempFilePath;
+										plus.runtime.install(tempFilePath);
+									}
+								});
+							}
+						}
+					});
+				}
+			} else if (val == 2) {
+				let isInstallIDM = plus.runtime.isApplicationExist({
+					pname: 'idm.internet.download.manager.plus'
+				});
+				if (!isInstallIDM) {
+					uni.showModal({
+						icon: 'none',
+						title: '你的手机似乎未安装IDM+,是否安装',
+						success: res => {
+							if (res.confirm) {
+								uni.showLoading({
+									title: '下载中'
+								});
+								uni.downloadFile({
+									url: 'https://aa-minprogram.oss-cn-beijing.aliyuncs.com/script/1DM%2B.apk',
+									success: e => {
+										uni.hideLoading();
+										let tempFilePath = e.tempFilePath;
+										plus.runtime.install(tempFilePath);
+									}
+								});
+							}
+						}
+					});
+				}
+			}
+
+			uni.showToast({
+				icon: 'none',
+				title: '新页面生效'
+			});
+		},
+		confirm() {
+			uni.showLoading({
+				title: '下载中'
+			});
+			uni.downloadFile({
+				url: this.updatainfo.url,
+				success: downloadResult => {
+					uni.hideLoading();
+					if (downloadResult.statusCode === 200) {
+						this.install(downloadResult.tempFilePath);
+					}
+				},
+				complete: () => {
+					uni.hideLoading();
+				}
+			});
+		},
+		close() {
+			this.$refs.popup.close();
+		},
+		install(tempFilePath) {
+			plus.runtime.install(
+				tempFilePath,
+				{
+					force: false
+				},
+				function() {
+					console.log('install success...');
+					plus.runtime.restart();
+				},
+				function(e) {
+					uni.showToast({
+						icon: 'none',
+						title: '安装出错'
+					});
+					console.error('install fail...');
+				}
+			);
+		},
+		async checkupdate() {
+			let that = this;
+			uni.showLoading({
+				title: '检查更新'
+			});
+
+			try {
+				let success = await update();
+				uni.hideLoading();
+			} catch (e) {
+				console.log(e);
+				uni.hideLoading();
+				//TODO handle the exception
+			}
+			setTimeout(() => {
+				uni.hideLoading();
+			}, 10000);
+		},
+		tohere(e) {
+			let key = e.currentTarget.dataset.key,
+				to = e.currentTarget.dataset.to;
+			uni.navigateTo({
+				url: to
+			});
+		},
+		changePullload(e) {
+			uni.showToast({
+				icon: 'none',
+				title: '打开新窗口时生效'
+			});
 			this.settingConfig.pullLoad = e.detail.value;
 		},
-		changeLog(e){
+		switchWindow(e) {
+			this.settingConfig.switchWindow = e.detail.value;
+		},
+		changeLog(e) {
+			uni.showToast({
+				icon: 'none',
+				title: '打开新窗口时生效'
+			});
 			let val = e.detail.value;
-			if(val){
+			if (val) {
 				uni.showModal({
-					content:'开启资源嗅探会可能会导致浏览器变慢',
-					confirmText:'确认开启',
-					success: (res) => {
-						if(res.confirm){
-							this.settingConfig.resLog = val
+					content: '开启资源嗅探会可能会导致浏览器变慢',
+					confirmText: '确认开启',
+					success: res => {
+						if (res.confirm) {
+							this.settingConfig.resLog = val;
+						}
+						if (res.cancel) {
+							this.settingConfig.resLog = false;
 						}
 					}
-				})
-			}else{
-				this.settingConfig.resLog = val
+				});
+			} else {
+				this.settingConfig.resLog = val;
 			}
-			
 		},
-		change(e){
+		change(e) {
 			let _type = e.currentTarget.dataset.type;
 			this.settingConfig[_type] = e.detail.value;
 		}
@@ -148,26 +323,26 @@ export default {
 
 <style lang="less">
 .content {
-	padding: 30upx 15upx;
-	background-color: #EEEEEE;
+	padding: 15px 7px;
+	background-color: #eeeeee;
 	min-height: 100vh;
 	box-sizing: border-box;
 }
 
 .list {
 	display: flex;
-	margin-bottom: 20upx;
+	margin-bottom: 10px;
 	align-items: center;
 	justify-content: space-between;
-	padding: 15upx 20upx;
+	padding: 7px 10px;
 	background-color: #f7f7f7;
 	.left-info {
 		display: flex;
 		align-items: center;
 		.icon {
-			margin-right: 10upx;
-			font-size: 30upx;
-			margin-bottom: -5upx;
+			margin-right: 5px;
+			font-size: 15px;
+			margin-bottom: -2px;
 		}
 	}
 }

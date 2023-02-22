@@ -51,7 +51,7 @@ export default {
 
 <style lang="less">
 .content {
-	padding: 30upx 15upx;
+	padding: 15px 7px;
 	background-color: #eeeeee;
 	min-height: 100vh;
 	box-sizing: border-box;
@@ -59,18 +59,18 @@ export default {
 
 .list {
 	display: flex;
-	margin-bottom: 20upx;
+	margin-bottom: 10px;
 	align-items: center;
 	justify-content: space-between;
-	padding: 15upx 20upx;
+	padding: 7px 10px;
 	background-color: #f7f7f7;
 	.left-info {
 		display: flex;
 		align-items: center;
 		.icon {
-			margin-right: 10upx;
-			font-size: 30upx;
-			margin-bottom: -5upx;
+			margin-right: 5px;
+			font-size: 15px;
+			margin-bottom: -2px;
 		}
 	}
 }

@@ -1,14 +1,6 @@
 <template>
 	<view class="content">
-		<unicloud-db v-slot:default="{data, loading, error, options}" collection="news_line" style="width: 100%;height: 100%;">
-			<view v-if="loading" style="padding: 30upx; text-align: center;">正在更新</view>
-			<view v-if="error">{{error.message}}</view>
-			<view v-else>
-				<view class="list" v-for="(item,index) in data" :key="index" :data-url="item.url" @tap="openWeb">
-					{{item.title}}
-				</view>
-			</view>
-		</unicloud-db>
+		
 		
 	</view>
 </template>
@@ -43,12 +35,13 @@
 	min-height: 100vh;
 	height: 100%;
 	background: #eee;
-	padding:100upx 30upx 30upx;
+	padding:50px 15px 15px;
 	box-sizing: border-box;
 	.list{
 		background: #F7F7F7;
-		padding: 15upx;
-		margin-bottom: 10upx;
+		padding: 7px;
+		font-size: 14px;
+		margin-bottom: 5px;
 	}
 }
 </style>

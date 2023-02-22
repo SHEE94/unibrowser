@@ -29,6 +29,8 @@ export default {
 		let debug_script = plus.storage.getItem('debug_script');
 		setTimeout(() => {
 			testWV = currentWebview.children()[0];
+			testWV.appendJsFile('_www/static/webview.js');
+			testWV.appendJsFile('_www/static/web-sdk.js');
 			testWV.appendJsFile('_www/static/vconsole.min.js');
 			testWV.addEventListener('loaded', e => {
 				
@@ -43,6 +45,12 @@ export default {
 							window.vConsole = new VConsole();
 						}
 					},500)`;
+				script_1 = `try {
+   eruda.init();
+   eruda.show() ;
+} catch (e) {
+    
+}`;
 				testWV.evalJS(script_1);
 				if(debug_script){
 					testWV.evalJS(JSON.parse(debug_script).data);
