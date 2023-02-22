@@ -5,11 +5,13 @@
 				<view class="btn" @click="menuChange('openBg',href)">后台打开</view>
 				<view class="btn" @click="menuChange('copyLink',href)">复制链接</view>
 				<view class="btn" @click="menuChange('overrLink',href)">拦截链接</view>
+				<view class="btn" @click="menuChange('adurl')">拦截该网址</view>
 				<view class="btn" @click="menuChange('copyText')">复制链接文本</view>
 			</template>
 			<template v-if="src && src != 'undefined'">
 				<view class="btn" @click="menuChange('saveImg')">保存图片</view>
 				<view class="btn" @click="menuChange('preview')">预览图片</view>
+				<view class="btn" @click="menuChange('copyImgLink',src)">复制图片链接</view>
 			</template>
 			<view class="btn" @click="menuChange('copyChangeText')">复制文本</view>
 			<view class="btn" @click="menuChange('ad')">标记为广告</view>
@@ -41,11 +43,16 @@ export default {
 				case 'openBg':
 					uni.$emit('OPEN-BG',{url:url})
 				break;
+				case 'copyImgLink':
+					this.clipText(this.src)
+				break;
 				case 'copyLink':
 					this.clipText(this.text)
 				break;
 				case 'overrLink':
-					
+				    let urls = uni.getStorageSync('overrideurl')
+					urls+=','+url
+					uni.setStorageSync('overrideurl',urls)
 				break;
 				case 'copyText':
 					this.clipText(this.text)
@@ -62,6 +69,12 @@ export default {
 									plus.nativeUI.toast('文件已保存');
 								},fail: (res) => {
 									plus.nativeUI.toast('未获得授权');
+									uni.saveFile({
+										tempFilePath:path,
+										success: (res) => {
+											plus.nativeUI.toast('文件保存路径：'+res.savedFilePath);
+										}
+									})
 								}
 							})
 							
@@ -92,6 +105,14 @@ export default {
 					uni.setStorageSync('adList',adlist)
 					uni.$emit('AD',{className:this.className})
 				break;
+				case 'adurl':
+					if(this.href){
+						this.urls = uni.getStorageSync('overrideurl')||'';
+						let hostarr = this.href.split('.');
+						this.urls += ','+hostarr[1];
+						uni.setStorageSync('overrideurl',this.urls)
+					}
+				break;
 			}
 			this.close()
 		},
@@ -106,19 +127,22 @@ export default {
 .menu-content {
 	.list-content {
 		position: fixed;
-		width: 50%;
+		width: 45%;
 		background: #ffffff;
-		padding: 30upx;
+		padding: 15px;
 		border-radius: 5px;
 		left: 50%;
 		top: 50%;
 		transform: translate(-50%, -50%);
 		// border:1px solid #ccc;
 		box-shadow: 0 0 20upx 2upx #c0c0c0;
+		max-height: 90%;
+		overflow-y: auto;
 		.btn {
 			color: #515151;
 			// border-bottom: 1px solid #C0C0C0;
-			padding: 20upx;
+			padding:10px;
+			
 		}
 		.btn:nth-last-child(1) {
 			border-bottom: none;

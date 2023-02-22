@@ -1,13 +1,153 @@
 var cgsdk = function() {
-	
+	plus.share = null;
+	plus.payment = null;
+	plus.messaging = null;
+	plus.contacts = null;
+	plus.gallery = null;
+	plus.push = null;
 	var webview = plus.webview.currentWebview();
+	var jsondata = plus.storage.getItem('jsondata');
+	var storage = plus.storage;
+
+	var require = function(src) {
+		if (!src) return;
+		return new Promise(function(resolve, reject) {
+			var s = document.createElement('script', {
+				pass: true
+			});
+			s.src = src;
+			s.async = true;
+			s.onload = function() {
+				resolve(true)
+			}
+			s.onerror = function() {
+				resolve(false)
+			}
+			document.body.appendChild(s);
+		})
+	}
+
+	window.$require = require;
+
 	var webSDK = {
-		current:webview
+		current: webview,
+		sendMessage: function(obj) {
+			plus.storage.setItem('jsondata', typeof obj == 'string' ? obj : JSON.stringify(obj))
+
+			window.webviewCG.webView.navigateTo({
+				url: '/pages/popup/popup?from=webdata' + '&jsonback=' + encodeURI(typeof obj ==
+					'string' ? obj : JSON.stringify(obj))
+			})
+			plus.storage.removeItem('jsondata')
+		},
+		storage: {
+			setItem: function(key, value) {
+				if (!key || !value) return;
+				storage.setItem(key, value)
+			},
+			getItem: function(key) {
+				if (!key) return;
+				return storage.getItem(key);
+			},
+			removeItem: function(key) {
+				if (!key) return;
+				storage.removeItem(key)
+			}
+		}
 	};
+	if (jsondata) {
+		webSDK.sendMessage(jsondata)
+	}
 	var touchX = 0;
 	var touchY = 0;
 	var touchEle = [];
 
+	var settingConfigObj = plus.storage.getItem('settingConfig')
+	if (typeof settingConfigObj == 'string') {
+		settingConfigObj = JSON.parse(settingConfigObj);
+	}
+	var setting = settingConfigObj.data;
+	// 监听下载
+	var nwv = webview.nativeInstanceObject();
+	if (setting.downloadCurrent != 0) {
+		var DownloadListener = plus.android.implements('android.webkit.DownloadListener', {
+			onDownloadStart: function(url) {
+				console.log('webview')
+				webSDK.DownloadListener&&webSDK.DownloadListener(url)
+				webSDK.sendMessage({
+					action: 'download',
+					url: encodeURIComponent(url)
+				})
+			}
+		});
+		plus.android.invoke(nwv, 'setDownloadListener', DownloadListener);
+	}
+
+	// dlan投屏
+	webSDK.Dlan = {
+		search: function() {
+			webSDK.sendMessage({
+				action: 'Dlan-search'
+			})
+		},
+		play: function(opts) {
+			if (opts.url.length < 5) return;
+			webSDK.sendMessage({
+				action: 'Dlan-play',
+				url: encodeURIComponent(opts.url),
+				id: opts.id,
+				title: opts.title
+			})
+		},
+		success: function(json) {},
+		complate: function(json) {}
+	}
+	window.Dlan = webSDK.Dlan.success;
+	window.DlanComplate = webSDK.Dlan.DlanComplate
+
+	// 监听路由变化
+	var _historyWrap = function(type) {
+		var orig = history[type];
+		var e = new Event(type);
+		return function() {
+			var rv = orig.apply(this, arguments);
+			e.arguments = arguments;
+			window.dispatchEvent(e);
+			return rv;
+		};
+	};
+	history.pushState = _historyWrap('pushState');
+	history.replaceState = _historyWrap('replaceState')
+	// 打开系统播放器
+	function openSysVideo(src) {
+		var Intent = plus.android.importClass("android.content.Intent");
+		var Uri = plus.android.importClass("android.net.Uri");
+		var main = plus.android.runtimeMainActivity();
+		var intent = new Intent(Intent.ACTION_VIEW);
+		var uri = Uri.parse(src);
+		intent.setDataAndType(uri, "video/*");
+		main.startActivity(intent);
+	}
+	webSDK.openSystemPlayer = openSysVideo
+
+
+	// 获取所有视频标签
+	function getAllVideoTag() {
+		let videos = document.querySelectorAll('video');
+		videos.forEach(function(item, index) {
+			if (item.autoplay) {
+				item.pause();
+				openSysVideo(item.src)
+				return;
+			}
+			item.addEventListener('playing', function() {
+				item.pause();
+				openSysVideo(item.src)
+			})
+		})
+	}
+
+	// 获取子集
 	function getChildren(parent) {
 		// console.log(parent.nodeType==3?parent.nodeValue:parent.nodeName);
 		for (var i = 0, len = parent.childNodes.length; i < len; i++) {
@@ -48,20 +188,13 @@ var cgsdk = function() {
 		}
 		return link;
 	}
-	webSDK.sendMessage = function(obj) {
-		setTimeout(function(){
-			cg.webView.navigateTo({
-				url: '/pages/popup/popup?from=webdata'+'&jsonback='+encodeURI(JSON.stringify(obj))
-			
-			})
-		},1000)
-	}
+
 	var longShow = function(target) {
 		parentCount = 0;
 		var tagName = target.tagName;
 		var hostname = location.hostname;
-		if(target.tagName == 'CANVAS'||target.tagName == 'INPUT'||target.tagName == 'BUTTON')return;
-		
+
+
 		var ele = getParents(target);
 		var src = '';
 		var href = '';
@@ -87,10 +220,20 @@ var cgsdk = function() {
 		}
 
 		var Param = '?type=' + tagName + '&from=web' + '&hostname=' + hostname + className + href + text + src;
-		
-		cg.webView.navigateTo({
+		var nottag = ['A', 'IMG', 'IFRAME', 'VIDEO'];
+		var isHas = false;
+		for (var j = 0, len = nottag.length; j < len; j++) {
+			if (nottag[j] == tagName) {
+				isHas = true;
+				break;
+			}
+		}
+
+		if (!isHas) return;
+		window.webviewCG.webView.navigateTo({
 			url: '/pages/popup/popup' + Param
 		})
+
 	}
 	var longClick = function() {
 		var timeOutEvent = null;
@@ -136,11 +279,19 @@ var cgsdk = function() {
 		document.addEventListener('touchmove', gtouchmove);
 		document.addEventListener('touchend', gtouchend);
 	}
+	if (setting.videoPLay) {
+		getAllVideoTag()
+	}
+	webSDK.getClickTarget = function() {
+		if (setting.videoPLay) {
+			getAllVideoTag()
+		}
+	}
 
-	longClick()
 	webSDK.getLongCLickTarget = function(target) {
 		longShow(target)
 	}
+
 
 	let readyEvent = new CustomEvent("SDK-READY", {
 		detail: webSDK
@@ -153,6 +304,7 @@ var cgsdk = function() {
 		}
 	}, 10)
 	if (!window.webSDK) {
+		longClick()
 		window.webSDK = webSDK;
 	}
 }

@@ -4,13 +4,15 @@
 			<view class="btn" @click="menuChange('reload')">刷新</view>
 			<view class="btn" @click="menuChange('openNewWindow')">打开新窗口</view>
 			<view class="btn" @click="openBgwindow">后台窗口</view>
+			<view class="btn" @click="opentraceless">{{settingConfig.traceless?'关闭无痕':'开启无痕'}} </view>
 			<view class="btn" @click="menuChange('book')">书签</view>
 			<view class="btn" @click="menuChange('addBook')">添加书签</view>
 			<view class="btn" @click="menuChange('history')">历史记录</view>
 			<view class="btn" @click="menuChange('full')">全屏</view>
 			<view class="btn" @click="menuChange('extend')">扩展</view>
+			<!-- <view class="btn" @click="menuChange('download')">下载</view> -->
 			<view class="btn" @click="menuChange('setting')">设置</view>
-			<view class="btn" @click="menuChange('addDesktop')">添加到桌面</view>
+			<view class="btn" @click="menuChange('quit')">退出</view>
 		</view>
 	</view>
 </template>
@@ -20,13 +22,21 @@ export default {
 	name: 'moremenu',
 	data() {
 		return {
-		
+			settingConfig:{}
 		};
 	},
-
+	mounted() {
+		this.settingConfig = uni.getStorageSync('settingConfig');
+	},
 	methods: {
 		openBgwindow() {
 			uni.$emit('BG-WINDOW');
+		},
+		opentraceless(){
+			this.settingConfig.traceless = !this.settingConfig.traceless;
+			uni.setStorageSync('settingConfig',this.settingConfig)
+			plus.nativeUI.toast(!this.settingConfig.traceless?'关闭无痕':'开启无痕');
+			this.$emit('close');
 		},
 		menuChange(str) {
 			switch (str) {
@@ -38,8 +48,8 @@ export default {
 					uni.$emit('OPEN-NEW-WINDOW');
 					this.$emit('close');
 					break;
-				case 'addDesktop':
-					uni.$emit('CREATE-SHORTCUT');
+				case 'quit':
+					plus.runtime.quit();
 					this.$emit('close');
 					break;
 				case 'history':
@@ -73,6 +83,11 @@ export default {
 						url:'/pages/script-list/script-list'
 					})
 				break;
+				case 'download':
+					uni.redirectTo({
+						url:'/pages/download/download'
+					})
+				break;
 			}
 			
 		}
@@ -92,9 +107,11 @@ export default {
 	padding: 15px;
 	top: 70px;
 	right: 10upx;
-	.btn {
+	max-height: 90%;
+	overflow-y: auto;
+	.btn {		
 		color: #515151;
-		padding: 20upx;
+		padding:10px 5px;
 	}
 }
 </style>
