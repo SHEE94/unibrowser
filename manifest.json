@@ -2,11 +2,25 @@
     "name" : "Script浏览器",
     "appid" : "__UNI__E587B13",
     "description" : "一款专门用于网页游戏的浏览器，提供本地脚本运行环境",
-    "versionName" : "2.0.1",
-    "versionCode" : 201,
+    "versionName" : "2.4.0",
+    "versionCode" : 240,
     "transformPx" : false,
+    "screenOrientation" : [
+        "portrait-primary",
+        "portrait-secondary",
+        "landscape-primary",
+        "landscape-secondary"
+    ],
     /* 5+App特有相关 */
     "app-plus" : {
+        "permissions" : {
+            "XMLHttpRequest" : {
+                "description" : "跨域网络连接"
+            }
+        },
+        "compatible" : {
+            "ignoreVersion" : true
+        },
         "runmode" : "liberate",
         "error" : {
             "url" : "none"
@@ -22,11 +36,16 @@
         },
         /* 模块配置 */
         "modules" : {
-            "VideoPlayer" : {},
-            "Payment" : {}
+            "Webview-x5" : {}
         },
         /* 应用发布信息 */
         "distribute" : {
+            "orientation" : [
+                "portrait-primary",
+                "portrait-secondary",
+                "landscape-primary",
+                "landscape-secondary"
+            ],
             /* android打包配置 */
             "android" : {
                 "permissions" : [
@@ -46,14 +65,19 @@
                     "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
                     "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
                     "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
-                ]
+                ],
+                "targetSdkVersion" : 28,
+                "minSdkVersion" : 25
             },
             /* ios打包配置 */
-            "ios" : {},
+            "ios" : {
+                "idfa" : false
+            },
             /* SDK配置 */
             "sdkConfigs" : {
                 "ad" : {},
-                "payment" : {}
+                "payment" : {},
+                "share" : {}
             },
             "splashscreen" : {
                 "androidStyle" : "common"
