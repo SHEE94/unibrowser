@@ -4,7 +4,18 @@
 不可替换为官方的webview.js的SDK，为了兼容问题，本应用对官方的SDK进行了比较大的修改，如果替换可能无法正常使用。
 
 ## 构建方式
-使用HBuildx构建应用进行安装，目前只针对安卓端，
+使用HBuildx构建应用进行安装.
+
+## 如何集成到自己的应用内
+主要是/pages/browser页面，直接在自己的应用跳转的时候在URL地址上带上url参数，如：
+
+```
+uni.navigateTo({
+				url:"/pages/browser?url=www.baidu.com",
+				animationType:'fade-in'
+		})
+```
+这是放在pages目录的前提下，放在其他地址的话，跳转的时候自行修改浏览器的目录地址
 
 ## 后续
 之后有更新的话会在GitHub上更新
