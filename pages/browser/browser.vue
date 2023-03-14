@@ -46,7 +46,7 @@ export default {
 			currentWV: 0,
 			WVindex: 0, //当前处于哪个页面
 			maxWebview: 5,
-			newWebview: '', //'_www/static/html/home/index8.html',
+			newWebview: 'https://cn.bing.com', //'_www/static/html/home/index8.html',
 			homeUrl: '',
 			searchEngine: 'https://cn.bing.com/search?q=',
 			allRes: [],
@@ -264,10 +264,10 @@ export default {
 			wv.appendJsFile('_www/static/webview.js');
 			wv.appendJsFile('_www/static/web-sdk.js');
 			
-			document.addEventListener('touchstart',function(evt){
-				evt.stopPropagation()
-				evt.preventDefault();
-			})
+			// document.addEventListener('touchstart',function(evt){
+			// 	evt.stopPropagation()
+			// 	evt.preventDefault();
+			// })
 			
 			
 			wv.evalJS(`

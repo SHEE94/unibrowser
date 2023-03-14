@@ -75,8 +75,7 @@ export default {
 	},
 	onShow() {
 		app.globalData.LoadResource = []
-		this.homebookmark = uni.getStorageSync('homebookmark')||[];
-		console.log(this.homebookmark)
+		this.homebookmark = uni.getStorageSync('homebookmark')||[{url:'https://cn.bing.com',ico:'https://cn.bing.com/favicon.ico',title:'必应'}];
 		if(typeof this.homebookmark == 'string'){
 			this.homebookmark = JSON.parse(this.homebookmark)
 		}
@@ -87,7 +86,6 @@ export default {
 		this.stoppuu(false) 
 		
 		uni.onKeyboardHeightChange(res => {
-			console.log(res.height);
 			if (res.height > 100) {
 				this.hideBar = true;
 			} else {

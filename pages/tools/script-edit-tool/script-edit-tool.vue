@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<web-view src="https://env-qoymgmtn-1257446115.tcloudbaseapp.com/codeedit/index.html" @message="message"></web-view>
+		<web-view src="_www/static/html/codeedit/index.html" @message="message"></web-view>
 	</view>
 </template>
 
