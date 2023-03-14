@@ -22,10 +22,40 @@
 	</head>
 	<body>
 		<div>
-			<textarea id="commands">(function(){
-	//code
-	console.log('hello world!')
-})()</textarea>
+			<textarea id="commands">var myScript = function(){
+	// 获取当前浏览器窗口信息
+	var current = webSDK.current;
+	
+	/**
+	 * @name 拦截网页资源加载
+	 * @param {object} options 拦截参数
+	 * options.match:(string) 资源的URL地址，使用JAVA正则表达式
+	 */
+	//current.overrideResourceRequest(options)
+
+	/**
+	 * @name 拦截网页URL请求
+	 * @param {object} options
+	 * options.match:(string) URL跳转请求 ，使用JAVA正则
+	 * 返回拦截的url地址
+	*/
+	// current.overrideUrlLoading(options,function(e){
+	// 	e.url
+	// })
+
+	/**
+	 * @name 截获浏览器长按事件
+	 * 返回长按元素
+	 */
+	// webSDK.getLongCLickTarget = function(e){}
+}
+
+// 等待SDK加载完成
+if (window.webSDK) {
+	myScript();
+} else {
+	document.addEventListener('SDK-READY', myScript, false);
+}</textarea>
 			<div class="btns-menu-content">
 				<div class="A-shortcut">
 					<ul class="ul">

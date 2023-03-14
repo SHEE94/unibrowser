@@ -2,8 +2,8 @@
     "name" : "Script浏览器",
     "appid" : "__UNI__E587B13",
     "description" : "一款专门用于网页游戏的浏览器，提供本地脚本运行环境",
-    "versionName" : "2.4.0",
-    "versionCode" : 240,
+    "versionName" : "2.4.2",
+    "versionCode" : 242,
     "transformPx" : false,
     "screenOrientation" : [
         "portrait-primary",

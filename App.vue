@@ -1,6 +1,6 @@
 <script>
 import update from '@/uni_modules/uni-upgrade-center-app/utils/check-update';
-import db from './utils/db.js';
+// import db from './utils/db.js';
 import { ADBlock } from './utils/ADBlock.js';
 
 export default {

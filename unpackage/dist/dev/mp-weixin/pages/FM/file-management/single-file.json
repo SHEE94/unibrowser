@@ -1,6 +1,0 @@
-{
-  "component": true,
-  "usingComponents": {
-    "uni-segmented-control": "/pages/FM/file-management/uni-segmented-control/uni-segmented-control"
-  }
-}

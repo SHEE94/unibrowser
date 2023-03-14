@@ -1,1 +1,0 @@
-<view><video style="height:100vh;width:100%;" src="{{src}}" controls="{{true}}" codec="software"></video></view>
