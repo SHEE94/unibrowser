@@ -1,0 +1,19 @@
+{  
+    "name": "Dlna投屏插件",  
+    "id": "JX-Dlna",  
+    "version": "1.0.0",  
+    "description": "原生投屏插件，支持安卓，支持Dlna",  
+    "_dp_type":"nativeplugin",  
+    "_dp_nativeplugin":{  
+        "android": {  
+            "plugins": [  
+                {  
+                    "type": "module",  
+                    "name": "JX-Dlna",  
+                    "class": "com.jvxiang.uniplugin_dlna.DlnaModule"  
+                }  
+            ],  
+            "integrateType": "aar"
+        }
+	}
+}

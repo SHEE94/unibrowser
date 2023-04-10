@@ -6,7 +6,7 @@
 </template>
 
 <script>
-	import db from '@/utils/db.js';
+	
 	const app = getApp()
 	export default {
 		data() {
@@ -16,21 +16,14 @@
 			};
 		},
 		onLoad() {
-			this.getdata()
+			
 			let that = this;
 			plus.runtime.getProperty(plus.runtime.appid, function(widgetInfo) {
 				that.version = widgetInfo.version
 			})
 		},
 		methods:{
-			async getdata(){
-				app.globalData.about_rich_text = await db.get('help');
-				if(app.globalData.about_rich_text.length>0){
-					this.node = app.globalData.about_rich_text[0].about_rich_text
-				}
-				console.log(this.node)
-				// editor.txt.setJSON(data[0])
-			}
+			
 		}
 	}
 </script>

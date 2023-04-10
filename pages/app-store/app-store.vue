@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import db from '@/utils/db.js';
+
 export default {
 	data() {
 		return {

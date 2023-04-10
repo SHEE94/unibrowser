@@ -45,8 +45,8 @@ export default {
 			webviewList: [],
 			currentWV: 0,
 			WVindex: 0, //当前处于哪个页面
-			maxWebview: 5,
-			newWebview: 'https://cn.bing.com', //'_www/static/html/home/index8.html',
+			maxWebview: 50,//当前最大可以打开的窗口数量
+			newWebview: 'https://cn.bing.com', //'_www/static/html/home/index8.html', //新窗口默认页面
 			homeUrl: '',
 			searchEngine: 'https://cn.bing.com/search?q=',
 			allRes: [],
@@ -187,8 +187,8 @@ export default {
 		canback() {
 			return new Promise((res, rej) => {
 				let wv = this.webviewList[this.WVindex];
+				if(!wv)return;
 				wv.canBack(e => {
-					console.log(e);
 					if (e.canBack) {
 						wv.back();
 						res(false);
@@ -221,6 +221,9 @@ export default {
 		offResize() {
 			uni.offWindowResize(() => {});
 		},
+		uuid() {
+			return Math.random().toString(16).slice(2);  
+		},
 		createWebView(url) {
 			uni.navigateTo({
 				url: '../popup/popup?from=back'
@@ -234,6 +237,7 @@ export default {
 				'',
 				'',
 				{
+					id:this.uuid(),
 					height: uni.getSystemInfoSync().screenHeight - this.top,
 					left: left,
 					top: this.top,
@@ -243,8 +247,8 @@ export default {
 					hardwareAccelerated: true,
 					plusrequire: 'ahead',
 					progress: {
-						color: '#A0EEE1',
-						height: '1px'
+						color: '#4580ee',
+						height: '2px'
 					},
 					scalable: true
 				},
@@ -259,7 +263,7 @@ export default {
 			this.webviewList.push(wv);
 
 			// wv.appendJsFile('_www/static/jq.js');
-			wv.appendJsFile('_www/static/clearAd.js');
+			// wv.appendJsFile('_www/static/clearAd.js');
 			wv.appendJsFile('_www/static/touch.js');
 			wv.appendJsFile('_www/static/webview.js');
 			wv.appendJsFile('_www/static/web-sdk.js');
@@ -270,21 +274,21 @@ export default {
 			// })
 			
 			
-			wv.evalJS(`
-			var createElement = document.createElement;
-			    document.createElement = function (tag,opts) {
-					if(opts&&opts.pass){
-						return createElement.apply(this, arguments);
-					}
-			        switch (tag) {
-			            case 'script':
-			                console.log('禁用动态添加脚本');
-			                break;
-			            default:
-			                return createElement.apply(this, arguments);
-			        }
-			    }
-			`);
+			// wv.evalJS(`
+			// var createElement = document.createElement;
+			//     document.createElement = function (tag,opts) {
+			// 		if(opts&&opts.pass){
+			// 			return createElement.apply(this, arguments);
+			// 		}
+			//         switch (tag) {
+			//             case 'script':
+			//                 console.log('禁用动态添加脚本');
+			//                 break;
+			//             default:
+			//                 return createElement.apply(this, arguments);
+			//         }
+			//     }
+			// `);
 			this.overrideUrlLoading(wv);
 
 			setTimeout(() => {
@@ -348,7 +352,7 @@ export default {
 					wv.endPullToRefresh();
 					// 重新加载时清空资源记录
 
-					this.allRes = [];
+					app.globalData.allRes = this.allRes = [];
 				});
 
 				wv.addEventListener('loaded', e => {
@@ -387,7 +391,6 @@ export default {
 						for (let i = 0; i < scriptList.length; i++) {
 							if (scriptList[i].active) {
 								let script = scriptList[i].script;
-								console.log(script);
 								wv.evalJS(script);
 							}
 						}
@@ -396,7 +399,7 @@ export default {
 				this.setWebviewClient(nwv);
 			});
 			this.dragWebview();
-
+			return wv;
 			// #endif
 		},
 		// 设置webview的辅助
@@ -464,48 +467,17 @@ export default {
 				});
 			}
 		},
-		// 资源嗅探
+		// 用于资源嗅探
 		getResourceList() {
-			let Resource = this.initResArr;
-			for (let i = 0, len = this.allRes.length; i < len; i++) {
-				if (/.*\.(jpg|png|jpeg|bmp|ico)\b/.test(this.allRes[i])) {
-					let obj = {
-						type: 'img',
-						url: this.allRes[i]
-					};
-					Resource.img.unshift(obj);
-				}
-				if (/.*\.(js)\b/.test(this.allRes[i])) {
-					let obj = {
-						type: 'js',
-						url: this.allRes[i]
-					};
-					Resource.js.unshift(obj);
-				}
-				if (/.*\.(css)\b/.test(this.allRes[i])) {
-					let obj = {
-						type: 'css',
-						url: this.allRes[i]
-					};
-					Resource.css.unshift(obj);
-				}
-				if (/.*\.(html)\b/.test(this.allRes[i])) {
-					let obj = {
-						type: 'iframe',
-						url: this.allRes[i]
-					};
-					tResource.iframe.unshift(obj);
-				}
-
-				if (/.*\.(mp4|m4v|m3u8)\b/.test(this.allRes[i])) {
-					let obj = {
-						type: 'video',
-						url: this.allRes[i]
-					};
-					Resource.video.unshift(obj);
+			app.globalData.allRes = this.allRes;
+		},
+		
+		wvPause(wvid){
+			for(let i = 0;i<this.webviewList.length;i++){
+				if(this.settingConfig.dormancy){
+					this.webviewList[i].pause()
 				}
 			}
-			app.globalData.LoadResource = Resource;
 		},
 
 		// 事件监听
@@ -516,7 +488,10 @@ export default {
 					return;
 				}
 				plus.nativeUI.toast('已在后台打开');
-				this.createWebView(e.url);
+				let wv = this.createWebView(e.url);
+				if(this.settingConfig.dormancy){
+					wv.pause()
+				}
 			});
 			uni.$on('RELOAD', () => {
 				this.webviewList[this.WVindex].reload();
@@ -528,8 +503,11 @@ export default {
 					return;
 				}
 				this.homeUrl = this.newWebview;
-				this.createWebView(this.homeUrl);
+				
+				let wv = this.createWebView(this.homeUrl);
 				this.resetWebview();
+				this.wvPause()
+				wv.resume()
 			});
 			// 关闭某个窗口
 			uni.$on('CLOSE-WINDOW', index => {
@@ -539,10 +517,15 @@ export default {
 						url: '../main/main',
 						animationType: 'fade-in'
 					});
+					return;
 					// this.createWebView(this.newWebview);
 				}
-				this.webviewList[this.webviewList.length - 1].show();
+				let wv = this.webviewList[this.webviewList.length - 1];
+				wv.show();
+				
 				this.resetWebview();
+				this.wvPause()
+				wv.resume()
 			});
 			// 关闭所有窗口
 			uni.$on('CLOSE-WINDOW-ALL', () => {
@@ -550,7 +533,7 @@ export default {
 					url: '../main/main',
 					animationType: 'fade-in'
 				});
-				// this.webviewList.length = 0;
+				this.webviewList.length = 0;
 				// this.createWebView(this.homeUrl);
 				// this.resetWebview();
 			});
@@ -608,11 +591,13 @@ export default {
 			});
 			// 切换后台窗口
 			uni.$on('SWITCH-WEBVIEW', e => {
+				this.wvPause()
 				let index = e.index;
 				let lenIndex = this.webviewList.length - 1;
 				this.webviewList.forEach((item, _index) => {
 					if (_index == index) {
 						item.show();
+						item.resume()
 					} else {
 						this.webviewList.length;
 					}
@@ -620,6 +605,7 @@ export default {
 				this.webviewList[index] = this.webviewList.splice(lenIndex, 1, this.webviewList[index])[0];
 				this.WVindex = lenIndex;
 				this.resetWebview();
+				
 			});
 
 			// 设置搜索栏信息

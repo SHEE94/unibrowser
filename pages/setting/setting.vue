@@ -9,6 +9,10 @@
 			<view class="arr"><switch :checked="settingConfig.resLog" @change="changeLog" /></view>
 		</view>
 		<view class="list">
+			<view class="left-info"><view class="label">后台窗口休眠</view></view>
+			<view class="arr"><switch :checked="settingConfig.dormancy" data-type="dormancy" @change="change" /></view>
+		</view>
+		<view class="list">
 			<view class="left-info"><view class="label">使用系统播放器</view></view>
 			<view class="arr"><switch :checked="settingConfig.videoPLay" data-type="videoPLay" @change="change" /></view>
 		</view>
@@ -71,6 +75,7 @@ export default {
 				resLog: false,
 				switchWindow: false,
 				arm: 220,
+				dormancy:false,
 				downloadCurrent: 0
 			},
 			downloadType: ['系统下载器', 'ADM下载器', 'IDM+下载器'],
@@ -122,6 +127,7 @@ export default {
 			from: null
 		};
 	},
+	
 	onLoad(options) {
 		if (options.from) {
 			this.from = options.from;
@@ -289,6 +295,9 @@ export default {
 		},
 		switchWindow(e) {
 			this.settingConfig.switchWindow = e.detail.value;
+		},
+		dormancy(e){
+			
 		},
 		changeLog(e) {
 			uni.showToast({

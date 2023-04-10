@@ -1,8 +1,8 @@
 {
     "name" : "Script浏览器",
-    "appid" : "__UNI__E587B13",
+    "appid" : "",
     "description" : "一款专门用于网页游戏的浏览器，提供本地脚本运行环境",
-    "versionName" : "2.4.2",
+    "versionName" : "2.4.3",
     "versionCode" : 242,
     "transformPx" : false,
     "screenOrientation" : [
@@ -71,7 +71,8 @@
             },
             /* ios打包配置 */
             "ios" : {
-                "idfa" : false
+                "idfa" : false,
+                "dSYMs" : false
             },
             /* SDK配置 */
             "sdkConfigs" : {
@@ -112,6 +113,22 @@
                         "spotlight@2x" : "unpackage/res/icons/80x80.png",
                         "spotlight@3x" : "unpackage/res/icons/120x120.png"
                     }
+                }
+            }
+        },
+        "nativePlugins" : {
+            "JX-Dlna" : {
+                "__plugin_info__" : {
+                    "name" : "Dlna投屏插件",
+                    "description" : "原生投屏插件，支持安卓，支持Dlna",
+                    "platforms" : "Android",
+                    "url" : "",
+                    "android_package_name" : "",
+                    "ios_bundle_id" : "",
+                    "isCloud" : false,
+                    "bought" : -1,
+                    "pid" : "",
+                    "parameters" : {}
                 }
             }
         }

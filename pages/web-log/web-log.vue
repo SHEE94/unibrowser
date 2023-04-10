@@ -22,14 +22,61 @@ export default {
 		return {
 			range: ['all', 'js', 'css', 'img', 'iframe','video'],
 			current: 0,
-			showRes: []
+			showRes: [],
+			allRes:[],
+			initResArr: { js: [], css: [], img: [], iframe: [], video: [] },
 		};
+	},
+	created(){
+		this.allRes = app.globalData.allRes;
+		this.getResourceList()
+		this.showAll();
 	},
 	mounted() {
 		this.settingConfig = uni.getStorageSync('settingConfig')||{};
-		console.log(this.settingConfig )
 	},
 	methods: {
+		getResourceList() {
+			this.Resource = this.initResArr;
+			for (let i = 0, len = this.allRes.length; i < len; i++) {
+				if (/.*\.(jpg|png|jpeg|bmp|ico)\b/.test(this.allRes[i])) {
+					let obj = {
+						type: 'img',
+						url: this.allRes[i]
+					};
+					this.Resource.img.unshift(obj);
+				}
+				if (/.*\.(js)\b/.test(this.allRes[i])) {
+					let obj = {
+						type: 'js',
+						url: this.allRes[i]
+					};
+					this.Resource.js.unshift(obj);
+				}
+				if (/.*\.(css)\b/.test(this.allRes[i])) {
+					let obj = {
+						type: 'css',
+						url: this.allRes[i]
+					};
+					this.Resource.css.unshift(obj);
+				}
+				if (/.*\.(html)\b/.test(this.allRes[i])) {
+					let obj = {
+						type: 'iframe',
+						url: this.allRes[i]
+					};
+					this.Resource.iframe.unshift(obj);
+				}
+		
+				if (/.*\.(mp4|m4v|m3u8)\b/.test(this.allRes[i])) {
+					let obj = {
+						type: 'video',
+						url: this.allRes[i]
+					};
+					this.Resource.video.unshift(obj);
+				}
+			}
+		},
 		bindChange(e) {
 			this.current = e.detail.value;
 			let _type = this.range[this.current];
@@ -126,8 +173,8 @@ export default {
 		}
 	},
 	onLoad() {
-		this.Resource = app.globalData.LoadResource||{ js: [], css: [], img: [], iframe: [], video: [] };
-		this.showAll();
+		// this.Resource = app.globalData.LoadResource||{ js: [], css: [], img: [], iframe: [], video: [] };
+		
 	}
 };
 </script>

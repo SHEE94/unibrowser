@@ -73,7 +73,7 @@ var cgsdk = function() {
 		var DownloadListener = plus.android.implements('android.webkit.DownloadListener', {
 			onDownloadStart: function(url) {
 				console.log('webview')
-				webSDK.DownloadListener&&webSDK.DownloadListener(url)
+				webSDK.DownloadListener && webSDK.DownloadListener(url)
 				webSDK.sendMessage({
 					action: 'download',
 					url: encodeURIComponent(url)
@@ -130,22 +130,17 @@ var cgsdk = function() {
 	}
 	webSDK.openSystemPlayer = openSysVideo
 
-
-	// 获取所有视频标签
-	function getAllVideoTag() {
-		let videos = document.querySelectorAll('video');
-		videos.forEach(function(item, index) {
-			if (item.autoplay) {
-				item.pause();
-				openSysVideo(item.src)
-				return;
-			}
-			item.addEventListener('playing', function() {
-				item.pause();
-				openSysVideo(item.src)
-			})
-		})
+	
+	var $play = HTMLVideoElement.prototype.play;
+	HTMLVideoElement.prototype.play = function() {
+		
+		if (setting.videoPLay) {
+			openSysVideo(this.getAttribute('src'))
+			return;
+		}
+		$play.apply(this,arguments)
 	}
+
 
 	// 获取子集
 	function getChildren(parent) {
@@ -168,7 +163,7 @@ var cgsdk = function() {
 
 		let link = node;
 		// 只遍历5层
-		if (parentCount == 5) {
+		if (parentCount == 10) {
 			return link;
 		}
 		// 找到链接和图片直接返回
@@ -279,14 +274,7 @@ var cgsdk = function() {
 		document.addEventListener('touchmove', gtouchmove);
 		document.addEventListener('touchend', gtouchend);
 	}
-	if (setting.videoPLay) {
-		getAllVideoTag()
-	}
-	webSDK.getClickTarget = function() {
-		if (setting.videoPLay) {
-			getAllVideoTag()
-		}
-	}
+
 
 	webSDK.getLongCLickTarget = function(target) {
 		longShow(target)

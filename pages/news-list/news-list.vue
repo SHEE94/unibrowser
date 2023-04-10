@@ -6,7 +6,7 @@
 </template>
 
 <script>
-	import db from '@/utils/db.js'
+	
 	export default {
 		name:'uniNew',
 		data() {
