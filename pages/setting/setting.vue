@@ -172,22 +172,7 @@ export default {
 				if (!isInstallADM) {
 					uni.showModal({
 						icon: 'none',
-						title: '你的手机似乎未安装ADM Pro,是否现在下载',
-						success: res => {
-							if (res.confirm) {
-								uni.showLoading({
-									title: '下载中'
-								});
-								uni.downloadFile({
-									url: 'https://aa-minprogram.oss-cn-beijing.aliyuncs.com/script/ADM%20Pro.apk',
-									success: e => {
-										uni.hideLoading();
-										let tempFilePath = e.tempFilePath;
-										plus.runtime.install(tempFilePath);
-									}
-								});
-							}
-						}
+						title: '你的手机似乎未安装ADM Pro'
 					});
 				}
 			} else if (val == 2) {
@@ -197,29 +182,14 @@ export default {
 				if (!isInstallIDM) {
 					uni.showModal({
 						icon: 'none',
-						title: '你的手机似乎未安装IDM+,是否安装',
-						success: res => {
-							if (res.confirm) {
-								uni.showLoading({
-									title: '下载中'
-								});
-								uni.downloadFile({
-									url: 'https://aa-minprogram.oss-cn-beijing.aliyuncs.com/script/1DM%2B.apk',
-									success: e => {
-										uni.hideLoading();
-										let tempFilePath = e.tempFilePath;
-										plus.runtime.install(tempFilePath);
-									}
-								});
-							}
-						}
+						title: '你的手机似乎未安装IDM+'
 					});
 				}
 			}
 
 			uni.showToast({
 				icon: 'none',
-				title: '新页面生效'
+				title: '启动新页面时生效'
 			});
 		},
 		confirm() {
