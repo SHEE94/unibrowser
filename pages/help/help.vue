@@ -14,7 +14,7 @@
 			};
 		},
 		onLoad() {
-			this.getdata()
+			
 		},
 		methods:{
 			

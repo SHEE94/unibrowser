@@ -134,14 +134,15 @@
 				uni.showActionSheet({
 					itemList: ['拦截链接', '拦截域名', '复制链接', '下载', '投屏'],
 					success: res => {
+						let resRequest =[]
 						switch (res.tapIndex) {
 							case 0:
-								let resRequest = uni.getStorageSync('overrideResourceRequest') || [];
+								resRequest = uni.getStorageSync('overrideResourceRequest') || [];
 								resRequest.unshift(this.showRes[index].url);
 								uni.setStorageSync('overrideResourceRequest', resRequest);
 								break;
 							case 1:
-								let resRequest = uni.getStorageSync('overrideResourceRequestHost') || [];
+								resRequest = uni.getStorageSync('overrideResourceRequestHost') || [];
 								let hostname = this.convertTemp(this.showRes[index].url);
 								resRequest.unshift(hostname);
 								uni.setStorageSync('overrideResourceRequestHost', resRequest);

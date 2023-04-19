@@ -83,6 +83,18 @@ var cgsdk = function() {
 		plus.android.invoke(nwv, 'setDownloadListener', DownloadListener);
 	}
 
+
+	var $replece = location.replace
+
+	location.replace = function(url) {
+		var reg =  /\/\/.*\//;
+		if (!reg.test(location.href) && !settingConfigObj.redirect) {
+			plus.nativeUI.toast(decodeURI('%E5%B7%B2%E9%98%BB%E6%AD%A2%E7%BD%91%E9%A1%B5%E9%87%8D%E5%AE%9A%E5%90%91'))
+			return;
+		}
+		$replece.apply(this,arguments)
+	}
+
 	// dlan投屏
 	webSDK.Dlan = {
 		search: function() {
@@ -130,15 +142,15 @@ var cgsdk = function() {
 	}
 	webSDK.openSystemPlayer = openSysVideo
 
-	
+
 	var $play = HTMLVideoElement.prototype.play;
 	HTMLVideoElement.prototype.play = function() {
-		
+
 		if (setting.videoPLay) {
 			openSysVideo(this.getAttribute('src'))
 			return;
 		}
-		$play.apply(this,arguments)
+		$play.apply(this, arguments)
 	}
 
 
@@ -163,9 +175,9 @@ var cgsdk = function() {
 
 		let link = node;
 		// 只遍历5层
-		if (parentCount == 10) {
-			return link;
-		}
+		// if (parentCount == 10) {
+		// 	return link;
+		// }
 		// 找到链接和图片直接返回
 		if (node.tagName == 'A' || node.tagName == 'IMG' || node.tagName == 'IFRAME') {
 			Link = node;

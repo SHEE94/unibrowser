@@ -13,6 +13,10 @@
 			<view class="arr"><switch :checked="settingConfig.dormancy" data-type="dormancy" @change="change" /></view>
 		</view>
 		<view class="list">
+			<view class="left-info"><view class="label">允许网页重定向</view></view>
+			<view class="arr"><switch :checked="settingConfig.redirect" data-type="redirect" @change="change" /></view>
+		</view>
+		<view class="list">
 			<view class="left-info"><view class="label">使用系统播放器</view></view>
 			<view class="arr"><switch :checked="settingConfig.videoPLay" data-type="videoPLay" @change="change" /></view>
 		</view>
@@ -34,10 +38,10 @@
 			</view>
 			<view class="arr iconfont icon-right"></view>
 		</view>
-		<view class="list" @click="checkupdate">
+		<!-- <view class="list" @click="checkupdate">
 			<view class="left-info"><view class="label">检查更新</view></view>
 			<view class="arr iconfont icon-right"></view>
-		</view>
+		</view> -->
 		<view class="list" @click="reset">
 			<view class="left-info"><view class="label">恢复默认</view></view>
 			<view class="arr iconfont icon-right"></view>
@@ -76,7 +80,8 @@ export default {
 				switchWindow: false,
 				arm: 220,
 				dormancy:false,
-				downloadCurrent: 0
+				downloadCurrent: 0,
+				redirect:true
 			},
 			downloadType: ['系统下载器', 'ADM下载器', 'IDM+下载器'],
 			menuList: [
@@ -241,9 +246,8 @@ export default {
 				let success = await update();
 				uni.hideLoading();
 			} catch (e) {
-				console.log(e);
+				
 				uni.hideLoading();
-				//TODO handle the exception
 			}
 			setTimeout(() => {
 				uni.hideLoading();
@@ -275,22 +279,7 @@ export default {
 				title: '打开新窗口时生效'
 			});
 			let val = e.detail.value;
-			if (val) {
-				uni.showModal({
-					content: '开启资源嗅探会可能会导致浏览器变慢',
-					confirmText: '确认开启',
-					success: res => {
-						if (res.confirm) {
-							this.settingConfig.resLog = val;
-						}
-						if (res.cancel) {
-							this.settingConfig.resLog = false;
-						}
-					}
-				});
-			} else {
-				this.settingConfig.resLog = val;
-			}
+			this.settingConfig.resLog = val;
 		},
 		change(e) {
 			let _type = e.currentTarget.dataset.type;
