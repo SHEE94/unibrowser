@@ -25,13 +25,14 @@
 			return {
 				settingConfig:{
 					location:false,
-					cookies:false
+					cookies:false,
+					clipboard:true
 				}
 			};
 		},
 		onLoad() {
 			let settingConfig = uni.getStorageSync('settingConfig');
-			console.log(settingConfig)
+			
 			if (settingConfig) {
 				this.settingConfig = settingConfig;
 			}
@@ -46,12 +47,7 @@
 			change(e){
 				let val = e.detail.value;
 				let _type = e.currentTarget.dataset.type;
-				
-				if(_type == 'location'){
-					this.settingConfig.location = val
-				}else if(_type == 'cookies'){
-					this.settingConfig.cookies = val
-				}
+				this.settingConfig[_type] = val
 			}
 		}
 	}
