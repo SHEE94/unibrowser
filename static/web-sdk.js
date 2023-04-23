@@ -72,7 +72,6 @@ var cgsdk = function() {
 	if (setting.downloadCurrent != 0) {
 		var DownloadListener = plus.android.implements('android.webkit.DownloadListener', {
 			onDownloadStart: function(url) {
-				console.log('webview')
 				webSDK.DownloadListener && webSDK.DownloadListener(url)
 				webSDK.sendMessage({
 					action: 'download',
@@ -87,12 +86,13 @@ var cgsdk = function() {
 	var $replece = location.replace
 
 	location.replace = function(url) {
-		var reg =  /\/\/.*\//;
+		var reg = /\/\/.*\//;
 		if (!reg.test(location.href) && !settingConfigObj.redirect) {
-			plus.nativeUI.toast(decodeURI('%E5%B7%B2%E9%98%BB%E6%AD%A2%E7%BD%91%E9%A1%B5%E9%87%8D%E5%AE%9A%E5%90%91'))
+			plus.nativeUI.toast(decodeURI(
+				'%E5%B7%B2%E9%98%BB%E6%AD%A2%E7%BD%91%E9%A1%B5%E9%87%8D%E5%AE%9A%E5%90%91'))
 			return;
 		}
-		$replece.apply(this,arguments)
+		$replece.apply(this, arguments)
 	}
 
 	// dlan投屏
@@ -154,89 +154,73 @@ var cgsdk = function() {
 	}
 
 
-	// 获取子集
-	function getChildren(parent) {
-		// console.log(parent.nodeType==3?parent.nodeValue:parent.nodeName);
-		for (var i = 0, len = parent.childNodes.length; i < len; i++) {
-			// console.log(parent.childNodes[i].tagName);
-			if (parent.childNodes[i].tagName == 'A') {
-				touchEle[0] = parent.childNodes[i]
+	function interceptClip() {
+		var $execCommand = document.execCommand;
+		document.execCommand = function() {
+			let type = arguments[0]
+			if (type == 'copy' || type == 'cut') {
+				plus.nativeUI.toast(decodeURI(
+					'%E5%B7%B2%E9%98%BB%E6%AD%A2%E7%BD%91%E9%A1%B5%E5%86%99%E5%85%A5%E5%89%AA%E5%88%87%E6%9D%BF'
+				))
+				return false;
 			}
-			if (parent.childNodes[i].tagName == 'IMG') {
-				touchEle[1] = parent.childNodes[i]
-			}
-			getChildren(parent.childNodes[i])
+			$execCommand.apply(this, arguments)
 		}
-	}
-	let parentCount = 0;
-	// 遍历父节点是否是链接
-	function getParents(node) {
-		parentCount++;
 
-		let link = node;
-		// 只遍历5层
-		// if (parentCount == 10) {
-		// 	return link;
-		// }
-		// 找到链接和图片直接返回
-		if (node.tagName == 'A' || node.tagName == 'IMG' || node.tagName == 'IFRAME') {
-			Link = node;
-			return link
+		var not = function() {
+			plus.nativeUI.toast(decodeURI(
+				'%E5%B7%B2%E9%98%BB%E6%AD%A2%E7%BD%91%E9%A1%B5%E5%86%99%E5%85%A5%E5%89%AA%E5%88%87%E6%9D%BF'
+			))
+			return Promise.resolve(false);
 		}
-		let parentNode = node.parentNode
-		if (parentNode) {
-			if (parentNode.tagName == 'A' || parentNode.tagName == 'IMG' || parentNode.tagName == 'IFRAME') {
-				link = parentNode
-			} else {
-				getParents(parentNode)
+		if (navigator.clipboard) {
+			var $writeTex = navigator.clipboard.writeTex;
+			navigator.clipboard.writeTex = function() {
+				return not()
 			}
-		} else {
-			return node;
+			var $write = navigator.clipboard.write;
+			navigator.clipboard.write = function() {
+				return not()
+			}
 		}
-		return link;
+
+
+	}
+
+	if (!settingConfigObj.clipboard) {
+		interceptClip()
+	}
+
+	// 选中的标签
+	var actionTag = ['A', 'IMG', 'IFRAME', 'VIDEO'];
+
+	function getActionNodes(x, y) {
+		let nodes = document.elementsFromPoint(x, y)
+
+		for (let i = 0, len = nodes.length; i < len; i++) {
+			if (actionTag.includes(nodes[i].tagName)) {
+				return nodes[i]
+			}
+		}
+		return null;
 	}
 
 	var longShow = function(target) {
-		parentCount = 0;
-		var tagName = target.tagName;
+
+
 		var hostname = location.hostname;
 
+		var ele = getActionNodes(touchX, touchY) || target;
 
-		var ele = getParents(target);
-		var src = '';
-		var href = '';
+		var tagName = ele.tagName;
+		var src = '&src=' + encodeURIComponent(ele.src);
+		var href = '&href=' + encodeURIComponent(ele.href);
 		var className = '&className=' + ele.className;
 		var text = '&text=' + ele.textContent;
-
-		if (ele.tagName == 'A') {
-			tagName = 'A';
-			href = '&href=' + encodeURIComponent(ele.href);
-			className = '&className=' + ele.className;
-			text = '&text=' + ele.textContent
-		} else if (ele.tagName == 'IMG') {
-			tagName = 'IMG';
-			src = '&src=' + encodeURIComponent(ele.src);
-			className = '&className=' + ele.className;
-			text = '&text=' + ele.textContent
-		} else {
-			tagName = target.tagName;
-			href = '&href=' + encodeURIComponent(target.href);
-			src = '&src=' + encodeURIComponent(target.src);
-			className = '&className=' + target.className;
-			text = '&text=' + target.textContent
-		}
+		if (!actionTag.includes(ele.tagName)) return;
 
 		var Param = '?type=' + tagName + '&from=web' + '&hostname=' + hostname + className + href + text + src;
-		var nottag = ['A', 'IMG', 'IFRAME', 'VIDEO'];
-		var isHas = false;
-		for (var j = 0, len = nottag.length; j < len; j++) {
-			if (nottag[j] == tagName) {
-				isHas = true;
-				break;
-			}
-		}
 
-		if (!isHas) return;
 		window.webviewCG.webView.navigateTo({
 			url: '/pages/popup/popup' + Param
 		})
@@ -247,7 +231,7 @@ var cgsdk = function() {
 		var longTarget = null;
 
 		var gtouchstart = function(event) {
-			// event.preventDefault();
+			
 			event.stopPropagation();
 			var touch = event.touches[0];
 			touchX = touch.clienX || event.target.offsetLeft;
@@ -259,7 +243,7 @@ var cgsdk = function() {
 		};
 
 		var gtouchend = function(event) {
-			// event.preventDefault();
+			
 			event.stopPropagation();
 			longTarget = null;
 			clearTimeout(timeOutEvent);
@@ -285,6 +269,8 @@ var cgsdk = function() {
 		document.addEventListener('touchstart', gtouchstart);
 		document.addEventListener('touchmove', gtouchmove);
 		document.addEventListener('touchend', gtouchend);
+		document.addEventListener('touchcancel', gtouchmove)
+		document.addEventListener('mousecancel', gtouchmove)
 	}
 
 

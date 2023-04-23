@@ -4,27 +4,18 @@
 	import {
 		ADBlock
 	} from './utils/ADBlock.js';
-
+import settingConfigFile from '@/utils/settingConfig.js'
 	export default {
 		globalData: {
 			// appUpdate: update,
 			isAd: url => {
 				return ADBlock.isAd(url);
 			},
-			settingConfig: {
-				pullLoad: false,
-				videoPLay: false,
-				canvas: false,
-				resLog: false,
-				switchWindow: false,
-				arm: 220,
-				dormancy: false,
-				downloadCurrent: 0
-			},
+			settingConfig:settingConfigFile,
 			Dlan: {}
 		},
 		onLaunch: function() {
-
+			
 			this.globalData.Dlan = uni.requireNativePlugin('JX-Dlna');
 
 			

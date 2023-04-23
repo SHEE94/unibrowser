@@ -24,7 +24,7 @@
 				}))
 			},
 			message(e){
-				console.log(e)
+				
 				let scriptList = uni.getStorageSync('script_list')||[]
 				let scriptObj = e.detail.data[e.detail.data.length-1].script;
 				scriptList.unshift(scriptObj);

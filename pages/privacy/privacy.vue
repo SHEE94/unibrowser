@@ -9,6 +9,10 @@
 			<view class="left-info"><view class="label">拦截cookies</view></view>
 			<view class="arr"><switch :checked="settingConfig.cookies" data-type="cookies" @change="change" /></view>
 		</view>
+		<view class="list">
+			<view class="left-info"><view class="label">允许网页访问剪切板</view></view>
+			<view class="arr"><switch :checked="settingConfig.clipboard" data-type="clipboard" @change="change" /></view>
+		</view>
 		<view style="font-size: 11px;color: #999;">
 			浏览器其实本身并没有申请定位权限，该功能是为禁止H5自带的定位接口，但网页还是可以通过你的IP地址知道你的所在的城市
 		</view>

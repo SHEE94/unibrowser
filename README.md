@@ -295,6 +295,8 @@ const storage = webSDK.DownloadListener = (url)=>{
 ### 联系作者
 
  如果想请作者喝杯咖啡可以加作者QQ：549859890
+ 
+ 如果想了解最新开发进度可以加QQ群：326734794
 	
 
 

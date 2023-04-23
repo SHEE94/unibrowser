@@ -36,7 +36,7 @@
 			};
 		},
 		created() {
-			this.allRes = app.globalData.allRes;
+			this.allRes = app.globalData.allRes || [];
 			this.getResourceList()
 			this.showAll();
 		},

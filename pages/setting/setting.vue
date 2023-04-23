@@ -16,10 +16,12 @@
 			<view class="left-info"><view class="label">允许网页重定向</view></view>
 			<view class="arr"><switch :checked="settingConfig.redirect" data-type="redirect" @change="change" /></view>
 		</view>
+		
 		<view class="list">
 			<view class="left-info"><view class="label">使用系统播放器</view></view>
 			<view class="arr"><switch :checked="settingConfig.videoPLay" data-type="videoPLay" @change="change" /></view>
 		</view>
+		
 		<view class="list">
 			<view class="left-info"><view class="label">下载设置</view></view>
 			<view class="arr">
@@ -64,6 +66,7 @@
 <script>
 const app = getApp();
 import update from '@/uni_modules/uni-upgrade-center-app/utils/check-update';
+import settingConfigFile from '@/utils/settingConfig.js'
 export default {
 	data() {
 		return {
@@ -72,17 +75,7 @@ export default {
 				contents: '',
 				version: ''
 			},
-			settingConfig: {
-				pullLoad: false,
-				videoPLay: false,
-				canvas: false,
-				resLog: false,
-				switchWindow: false,
-				arm: 220,
-				dormancy:false,
-				downloadCurrent: 0,
-				redirect:true
-			},
+			settingConfig:JSON.parse(JSON.stringify(settingConfigFile)),
 			downloadType: ['系统下载器', 'ADM下载器', 'IDM+下载器'],
 			menuList: [
 				{
@@ -116,12 +109,12 @@ export default {
 					to: '/pages/tools/tools',
 					key: '/pages/tools/tools'
 				},
-				{
-					icon: 'icon-shuqian',
-					name: '帮助',
-					to: '/pages/help/help',
-					key: 'help'
-				},
+				// {
+				// 	icon: 'icon-shuqian',
+				// 	name: '帮助',
+				// 	to: '/pages/help/help',
+				// 	key: 'help'
+				// },
 				{
 					icon: 'icon-shuqian',
 					name: '关于',

@@ -34,7 +34,6 @@ export default {
 		});
 	},
 	onLoad(options) {
-		console.log(options);
 		this.from = options.from
 		
 		if (options.from == 'web') {
