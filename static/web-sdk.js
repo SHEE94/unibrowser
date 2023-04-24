@@ -187,7 +187,7 @@ var cgsdk = function() {
 
 	}
 
-	if (!settingConfigObj.clipboard) {
+	if (!setting.clipboard) {
 		interceptClip()
 	}
 
