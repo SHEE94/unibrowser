@@ -7,11 +7,11 @@
 			<input type="text" :value="info.url" placeholder="url" data-name="url" @input="enterinfo"/>
 		</view>
 		<view class="list" v-if="!edit">
-			<button type="default" data-type="bookmark" @click="addto">添加到书签</button>
-			<button type="default" data-type="home" @click="addto">添加到主页</button>
+			<button type="default" data-type="bookmark" @click="addto">{{$t("bookmark.add")}}</button>
+			<button type="default" data-type="home" @click="addto">{{$t("bookmark.add.home")}}</button>
 		</view>
 		<view class="list" v-else>
-			<button type="default" data-type="bookmark" @click="save">保存</button>
+			<button type="default" data-type="bookmark" @click="save">{{$t("bookmark.save")}}</button>
 		</view>
 	</view>
 </template>
@@ -42,7 +42,7 @@
 				if(!this.info.title||!this.info.url){
 					uni.showToast({
 						icon:'none',
-						title:'不可添加'
+						title:this.$t("bookmark.tips.1")
 					})
 					return;
 				}
@@ -61,7 +61,7 @@
 				}
 				uni.showToast({
 					icon:'success',
-					title:'已添加'
+					title:this.$t("bookmark.tips.2")
 				})
 				setTimeout(()=>{
 					uni.navigateBack({

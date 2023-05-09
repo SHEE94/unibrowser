@@ -48,11 +48,12 @@ export default {
 		}else if(options.from == 'nav'){
 			this.bgcolor = 'rgba(0,0,0,.5)'
 			this.from = 'bg'
-		}else if(options.from == 'webdata'){
-			let data = JSON.parse(decodeURI(options.jsonback));
-			uni.$emit('WEB-MESSAGE',data)
-			uni.navigateBack()
 		}
+		// else if(options.from == 'webdata'){
+		// 	let data = JSON.parse(decodeURI(options.jsonback));
+		// 	uni.$emit('WEB-MESSAGE',data)
+		// 	uni.navigateBack()
+		// }
 	},
 	methods: {
 		close() {

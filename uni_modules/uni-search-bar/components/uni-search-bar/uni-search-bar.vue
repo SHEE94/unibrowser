@@ -52,7 +52,7 @@
 		props: {
 			placeholder: {
 				type: String,
-				default: "请输入搜索内容"
+				default: "Please enter the search content"
 			},
 			radius: {
 				type: [Number, String],
@@ -68,7 +68,7 @@
 			},
 			cancelText: {
 				type: String,
-				default: '取消'
+				default: 'cancel'
 			},
 			bgColor: {
 				type: String,

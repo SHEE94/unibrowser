@@ -2,14 +2,14 @@
 	<view style="padding: 30upx;">
 		<view class="list">
 			<view class="left-info">				
-				<view class="label">开启拦截规则</view>
+				<view class="label">{{$t("inter.tips.2")}}</view>
 			</view>
 			<view class="arr">
 				<switch :checked="open" @change="changeopen" />
 			</view>
 		</view>
 		<view class="list">
-			<view class="left-info"><view class="label">拦截URL请求生效时机</view></view>
+			<view class="left-info"><view class="label">{{$t("inter.tips.3")}}</view></view>
 			<view class="arr">
 				<picker mode="selector" :range="effect" @change="changeeffect" range-key="name">
 					<view>
@@ -20,7 +20,7 @@
 			</view>
 		</view>
 		<view class="list">
-			<view class="left-info"><view class="label">排除拦截请求类型</view></view>
+			<view class="left-info"><view class="label">{{$t("inter.tips.4")}}</view></view>
 			<view class="arr">
 				<picker mode="selector" :range="exclude" @change="changeexclude" range-key="name">
 					<view>
@@ -31,7 +31,7 @@
 			</view>
 		</view>
 		<view class="list">
-			<view class="left-info"><view class="label">拦截模式</view></view>
+			<view class="left-info"><view class="label">{{$t("inter.tips.5")}}</view></view>
 			<view class="arr">
 				<picker mode="selector" :range="mode" @change="changemode" range-key="name">
 					<view>
@@ -42,16 +42,16 @@
 			</view>
 		</view>
 		<view style="background-color: #eee;padding: 20upx;">
-			<view style="font-size: 28upx;margin-bottom: 20upx;">拦截规则（支持JAVA正则）</view>
+			<view style="font-size: 28upx;margin-bottom: 20upx;">{{$t("inter.tips.6")}}</view>
 			<textarea
 				@input="entermacth"
 				:value="match"
-				placeholder="正则表达式如  .*weibo\.com/.*"
+				:placeholder='$t("inter.tips.16")'
 				style="background-color: #fff;width: 100%;height: 400upx;border-radius: 5px;padding: 10upx;box-sizing: border-box;"
 			/>
 		</view>
 		
-		<button type="default" style="width: 200upx;height: 80upx;font-size: 30upx;line-height: 80upx;margin: 50upx auto;display: block;" @click="save">保存</button>
+		<button type="default" style="width: 200upx;height: 80upx;font-size: 30upx;line-height: 80upx;margin: 50upx auto;display: block;" @click="save">{{$t("inter.tips.7")}}</button>
 	</view>
 </template>
 
@@ -59,9 +59,9 @@
 export default {
 	data() {
 		return {
-			effect: [{ name: '立即生效', type: 'instant' }, { name: '用户操作后生效', type: 'touchstart' }],
-			mode: [{ name: '满足条件不拦截', type: 'allow' }, { name: '满足时拦截', type: 'reject' }],
-			exclude: [{ name: '拦截处理所有', type: 'none' }, { name: '排除重定向', type: 'redirect' }],
+			effect: [{ name: this.$t('inter.tips.8'), type: 'instant' }, { name:  this.$t('inter.tips.9'), type: 'touchstart' }],
+			mode: [{ name: this.$t('inter.tips.10'), type: 'allow' }, { name: this.$t('inter.tips.11'), type: 'reject' }],
+			exclude: [{ name: this.$t('inter.tips.12'), type: 'none' }, { name:  this.$t('inter.tips.13'), type: 'redirect' }],
 			match: '',
 			effectIndex: 0,
 			modeIndex: 0,
@@ -102,7 +102,7 @@ export default {
 		save(){
 			uni.showModal({
 				title:'提示',
-				content:'使用错误的拦截规则可能会导致浏览网页异常',
+				content: this.$t('inter.tips.14'),
 				success: (res) => {
 					if(res.confirm){
 						uni.setStorageSync('overriUrl', {
@@ -116,7 +116,7 @@ export default {
 							open:this.open
 						});
 						uni.showToast({
-							title:'保存成功'
+							title: this.$t('inter.tips.15')
 						})
 					}
 				}

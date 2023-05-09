@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<view v-if="bookmark.length == 0" style="top: 40px;color: #666666;font-size: 28upx;text-align: center;width: 100%;">
-			空空如也
+			{{$t("bookmark.tips.3")}}
 		</view>
 		<view class="bookmark-list" @click="tohere" :data-index="index" :data-url="item.url" @longpress="edit" v-for="(item,index) in bookmark" :key="index">
 			<view class="title">{{item.title}}</view>
@@ -45,7 +45,7 @@
 			edit(e){
 				let index = e.currentTarget.dataset.index;
 				uni.showActionSheet({
-					itemList:['删除','添加到主页','编辑'],
+					itemList:[this.$t("bookmark.tips.4"),this.$t("bookmark.tips.5"),this.$t("bookmark.tips.6")],
 					success: (res) => {
 						if(res.tapIndex == 0){
 							this.bookmark.splice(index,1);
@@ -56,7 +56,7 @@
 							uni.setStorageSync('homebookmark',homebookmark)
 							uni.showToast({
 								icon:'success',
-								title:'添加成功'
+								title:this.$t("bookmark.tips.7")
 							})
 						} else if(res.tapIndex == 2){
 							uni.navigateTo({

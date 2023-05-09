@@ -1,21 +1,21 @@
 <template>
 	<view style="padding: 30upx;box-sizing: border-box;">
-		<view class="defaultbtn" @tap="clearALL">清空所有</view>
-		<view class="defaultbtn" @tap="addoverride">添加拦截资源地址</view>
+		<view class="defaultbtn" @tap="clearALL">{{$t("resourcelog.tips.1")}}</view>
+		<view class="defaultbtn" @tap="addoverride">{{$t("resourcelog.tips.2")}}</view>
 		<view v-if="request.length>0" style="border-bottom: 1px solid #CCCC77; padding: 30upx;font-weight: bold;">
-			拦截的链接
+			{{$t("resourcelog.tips.3")}}
 		</view>
 		<view v-for="(item, index) in request" :key="index" class="list" :data-index="index" @tap="changeRequest">			
 			{{ item }}
 		</view>
 		<view v-if="hostname.length>0" style="border-bottom: 1px solid #CCCC77; padding: 30upx;font-weight: bold;">
-			拦截的域名
+			{{$t("resourcelog.tips.4")}}
 		</view>
 		<view v-for="(item, index) in hostname" :key="index" class="list" :data-index="index" @tap="changeHOst">			
 			{{ item }}
 		</view>
 		<uni-popup  ref="pops" type="dialog">
-			<uni-popup-dialog mode="input" message="域名/链接" :duration="2000" :before-close="true" @close="showPoop" @confirm="confrim"></uni-popup-dialog>
+			<uni-popup-dialog mode="input" message="Link/Domain" :duration="2000" :before-close="true" @close="showPoop" @confirm="confrim"></uni-popup-dialog>
 		</uni-popup>
 	</view>
 </template>
@@ -45,7 +45,7 @@
 			},
 			confrim(value){
 				this.$refs.pops.close();
-				let _type = e.currentTarget.dataset.type;
+				// let _type = e.currentTarget.dataset.type;
 				if(value.length<5)return;
 					this.request.unshift(value);
 					uni.setStorageSync('overrideResourceRequest',this.request)
@@ -63,8 +63,8 @@
 			changeRequest(e){
 				let index = e.currentTarget.dataset.index;
 				uni.showModal({
-					title:'提示',
-					content:'确认删除？',
+					title:this.$t("browser.tips.10"),
+					content:this.$t("resourcelog.tips.5"),
 					success: (res) => {
 						if(res.confirm){
 							this.request.splice(index,1);
@@ -76,8 +76,8 @@
 			changeHOst(e){
 				let index = e.currentTarget.dataset.index;
 				uni.showModal({
-					title:'提示',
-					content:'确认删除？',
+					title:this.$t("browser.tips.10"),
+					content:this.$t("resourcelog.tips.5"),
 					success: (res) => {
 						if(res.confirm){
 							this.hostname.splice(index,1);

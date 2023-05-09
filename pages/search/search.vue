@@ -5,7 +5,7 @@
 		</view>
 		<view class="bar">
 			<view @tap="clearhistory" v-if="searchHistory.length>0">
-				清除
+				{{$t("search.tips.1")}}
 			</view>
 		</view>
 		<view class="search-history">
@@ -32,7 +32,7 @@
 				uni.removeStorageSync('search-history')
 				this.searchHistory = []
 				uni.showToast({
-					title:'清理完成',
+					title:this.$t("search.tips.2"),
 					icon:'success'
 				})
 			},

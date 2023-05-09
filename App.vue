@@ -1,18 +1,22 @@
 <script>
 	// import update from '@/uni_modules/uni-upgrade-center-app/utils/check-update';
 	// import db from './utils/db.js';
-	import {
-		ADBlock
-	} from './utils/ADBlock.js';
-import settingConfigFile from '@/utils/settingConfig.js'
+	// ADBlock模块，影响加载，自行决定是否使用
+	// import {
+	// 	ADBlock
+	// } from './utils/ADBlock.js';
+import settingConfigFile from '@/utils/settingConfig.js';
 	export default {
 		globalData: {
 			// appUpdate: update,
 			isAd: url => {
-				return ADBlock.isAd(url);
+				return false;
+				// return ADBlock.isAd(url);
 			},
 			settingConfig:settingConfigFile,
-			Dlan: {}
+			Dlan: {},
+			lastPage:[],
+			
 		},
 		onLaunch: function() {
 			
@@ -27,10 +31,6 @@ import settingConfigFile from '@/utils/settingConfig.js'
 			// ADBlock.on('LOADED', AD_HOSTS => {
 			// 	// console.log(ADBlock.isAd('http://img16.diyifanwen.com/ads/asda.png'));
 			// });
-
-			// this.down()
-			// update();
-			console.log('App Launch');
 			let arg = plus.runtime.arguments;
 			let ua =
 				uni.getStorageSync('UA') ||
@@ -53,9 +53,9 @@ import settingConfigFile from '@/utils/settingConfig.js'
 					});
 				}
 			}
-			this.getScript();
+			
 			plus.navigator.closeSplashscreen();
-			this.message()
+			
 		},
 		onShow: function() {
 
@@ -81,29 +81,14 @@ import settingConfigFile from '@/utils/settingConfig.js'
 					});
 				}
 			});
-			console.log('App Show');
-		},
-		onHide: function() {
-			console.log('App Hide');
-		},
-		methods: {
-			message() {
-				plus.globalEvent.addEventListener('plusMessage', msg => {
-					if (msg.data.args.data.name == 'postMessage') {
-						const info = msg.data.args.data.arg;
-						console.log(info)
-					}
-				});
-			},
-			getScript() {
-
-			}
 		}
+		
 	};
 </script>
 
 <style>
 	@import url('http://at.alicdn.com/t/font_2480200_3yzz8czk5xo.css');
+	@import url('./utils/iconfont2.css');
 	@import url('./utils/iconfont.css');
 
 	/*每个页面公共css */

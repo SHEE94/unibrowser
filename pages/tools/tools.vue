@@ -1,19 +1,19 @@
 <template>
 	<view class="content">
 		<view class="list" @tap="addScriptOnline">
-			<view class="left-info"><view class="label">添加在线脚本</view></view>
+			<view class="left-info"><view class="label">{{$t("tools.online.script")}}</view></view>
 			<view class="arr iconfont icon-right"></view>
 		</view>
 		<view class="list" @tap="addScriptLoacal">
-			<view class="left-info"><view class="label">添加本地脚本</view></view>
+			<view class="left-info"><view class="label">{{$t("tools.local.script")}}</view></view>
 			<view class="arr iconfont icon-right"></view>
 		</view>
 		<navigator class="list" url="script-edit-tool/script-edit-tool">
-			<view class="left-info"><view class="label">编辑脚本</view></view>
+			<view class="left-info"><view class="label">{{$t("tools.edit.script")}}</view></view>
 			<view class="arr iconfont icon-right"></view>
 		</navigator>
 		<navigator url="../script-list/script-list" class="list">
-			<view class="left-info"><view class="label">脚本列表</view></view>
+			<view class="left-info"><view class="label">{{$t("tools.script.list")}}</view></view>
 			<view class="arr iconfont icon-right"></view>
 		</navigator>
 	</view>
@@ -37,7 +37,7 @@ export default {
 			if (wv) {
 				uni.showToast({
 					icon: 'none',
-					title: '暂不可添加'
+					title:this.$t("tools.tips.1")
 				});
 				return;
 			}

@@ -25,7 +25,7 @@
 	let newrequest = [...resRequest, ...host];
 
 	// 合并过滤规则
-	let matchstr = uni.getStorageSync('matchstr')||[];
+	// let matchstr = uni.getStorageSync('matchstr')||[];
 
 	// console.log(matchstr.length)
 	// if (!matchstr.length || matchstr.length < newrequest.length) {
@@ -79,6 +79,8 @@
 		onLoad(options) {
 			if (options.url) {
 				this.homeUrl = this.to_link(options.url);
+			} else {
+				this.homeUrl = this.newWebview
 			}
 			// this.webviewList[this.WVindex].resume();
 		},
@@ -141,12 +143,37 @@
 							fontSize: '18px',
 							float: 'right',
 							onclick: this.clickForward
-						} //前进
+						}, //前进
+						{
+							fontSrc: '_www/static/ttf/iconfont2.ttf',
+							text: '\ue649',
+							fontSize: '18px',
+							float: 'right',
+							onclick: this.websiteInfo,
+							color:'#55aa7f'
+						} //网站信息
 						// { float: 'right', fontSrc: '_www/static/iconfont.ttf', text: '\ue609', fontSize: '18px' ,onclick:this.canback}
 					]
 				}
 			});
-			this.createWebView(this.homeUrl);
+			uni.removeStorageSync('lastPage')
+
+			if (this.settingConfig.lastPage) {
+				if (!app.globalData.lastPage.length) {
+					this.createWebView(this.homeUrl);
+					this.onWebview();
+					return
+				}
+				let lastPage = JSON.parse(JSON.stringify(app.globalData.lastPage));
+				app.globalData.lastPage = []
+				lastPage.forEach((item) => {
+					this.createWebView(item.historyUrl, item.id);
+				})
+
+			} else {
+				this.createWebView(this.homeUrl);
+
+			}
 			this.onWebview();
 		},
 		onBackPress() {
@@ -176,13 +203,17 @@
 				}
 			} */
 		},
+
 		methods: {
 			// 关闭监听
 			offListener() {
 				uni.$off(['WEB-MESSAGE', 'FULL', 'SWITCH-WEBVIEW', 'BOOK-MARK', 'RELOAD']);
 			},
 			backHomeCall() {
+				uni.removeStorageSync('lastPage')
+				app.globalData.lastPage = []
 				this.webviewList.length = 0;
+
 				uni.navigateBack({
 					animationType: 'fade-out'
 				});
@@ -193,7 +224,7 @@
 
 				if (!fqa) {
 					uni.showModal({
-						content: '点击主页将关闭所有窗口',
+						content: this.$t("browser.tips.1"),
 						success: res => {
 							if (res.confirm) {
 								this.backHomeCall();
@@ -216,6 +247,35 @@
 						});
 						break;
 				}
+			},
+			websiteInfo() {
+				let wv = this.webviewList[this.WVindex];
+				try {
+					let link = wv.getURL().split('//')
+					wv.evalJS(`
+						window.sendStatics()
+					`)
+					let hostname = link[1].split('/')[0]
+					uni.showLoading({
+						title: this.$t("website.tips.4")
+					})
+					setTimeout(() => {
+						uni.navigateTo({
+							url: '/pages/website-info/website-info?hostname=' + encodeURIComponent(
+								hostname),
+							animationType: 'fade-in',
+							success() {
+								uni.hideLoading()
+							}
+						})
+					}, 1000)
+
+				} catch (e) {
+					console.log(e)
+					//TODO handle the exception
+				}
+
+
 			},
 			clickForward() {
 				let wv = this.webviewList[this.WVindex];
@@ -265,7 +325,35 @@
 			uuid() {
 				return Math.random().toString(16).slice(2);
 			},
-			createWebView(url) {
+
+			//记录最后的窗口信息
+			saveLastPageInfo(wv) {
+
+				let setList = () => {
+					let lastPage = app.globalData.lastPage
+					let pageArr = []
+					this.webviewList.forEach(item => {
+						let obj = {
+							id: item.id,
+							historyUrl: item.getURL()
+						}
+						pageArr.push(obj)
+					})
+					lastPage = pageArr;
+					uni.setStorageSync('lastPage', lastPage)
+				}
+				uni.$on('CLOSE-WINDOW', setList)
+				uni.$on('CLOSE-WINDOW-ALL', () => {
+					uni.removeStorageSync('lastPage')
+					app.globalData.lastPage = []
+				})
+
+				wv.addEventListener('loaded', setList)
+				wv.addEventListener('close', setList)
+			},
+
+			createWebView(url, _id) {
+				let id = _id || this.uuid();
 				uni.navigateTo({
 					url: '../popup/popup?from=back'
 				});
@@ -276,8 +364,8 @@
 				let left = this.webviewList.length * 100 + '%';
 				let wv = plus.webview.create(
 					'',
-					'', {
-						id: this.uuid(),
+					id, {
+						id,
 						height: uni.getSystemInfoSync().screenHeight - this.top,
 						left: left,
 						top: this.top,
@@ -312,30 +400,18 @@
 				wv.appendJsFile('_www/static/webview.js');
 				wv.appendJsFile('_www/static/web-sdk.js');
 
-				// document.addEventListener('touchstart',function(evt){
-				// 	evt.stopPropagation()
-				// 	evt.preventDefault();
-				// })
 
-
-				// wv.evalJS(`
-				// var createElement = document.createElement;
-				//     document.createElement = function (tag,opts) {
-				// 		if(opts&&opts.pass){
-				// 			return createElement.apply(this, arguments);
-				// 		}
-				//         switch (tag) {
-				//             case 'script':
-				//                 console.log('禁用动态添加脚本');
-				//                 break;
-				//             default:
-				//                 return createElement.apply(this, arguments);
-				//         }
-				//     }
-				// `);
 				this.overrideUrlLoading(wv);
 
 				setTimeout(() => {
+
+					if (this.settingConfig.lastPage) {
+						this.saveLastPageInfo(wv)
+					}
+
+					wv.addEventListener('progressChanged')
+
+
 					// 拦截资源加载
 					this.overrideResourceRequest(wv);
 
@@ -344,6 +420,7 @@
 					// wv.appendJsFile('_www/static/script/videoBtn.js');
 
 					wv.addEventListener('loading', e => {
+
 						// ===================设置项 ========================
 						this.settingConfig = uni.getStorageSync('settingConfig');
 						if (this.settingConfig.location) {
@@ -361,13 +438,13 @@
 									height: '50px',
 									range: '200px',
 									contentdown: {
-										caption: '下拉可以刷新'
+										caption: this.$t("browser.tips.2")
 									},
 									contentover: {
-										caption: '释放立即刷新'
+										caption: this.$t("browser.tips.3")
 									},
 									contentrefresh: {
-										caption: '正在刷新...'
+										caption: this.$t("browser.tips.4")
 									}
 								},
 								onRefresh
@@ -400,6 +477,7 @@
 
 					wv.addEventListener('loaded', e => {
 
+
 						if (this.settingConfig.cookies || this.settingConfig.traceless) {
 							plus.navigator.removeSessionCookie();
 						}
@@ -419,7 +497,7 @@
 								url: wv.getURL()
 							});
 						}
-						this.removeDom(wv);
+
 						// 加载脚本文件
 						if (scriptFiles.length > 0) {
 							for (let i = 0; i < scriptFiles.length; i++) {
@@ -438,6 +516,9 @@
 								}
 							}
 						}
+						setTimeout(() => {
+							this.removeDom(wv);
+						}, 1000)
 					});
 					this.setWebviewClient(nwv);
 				});
@@ -539,12 +620,16 @@
 
 			// 事件监听
 			onWebview() {
+				let clearLastPage = () => {
+					uni.removeStorageSync('lastPage')
+					app.globalData.lastPage = []
+				}
 				uni.$on('OPEN-BG', e => {
 					if (this.webviewList.length > this.maxWebview) {
-						plus.nativeUI.toast('已打开最大窗口数量');
+						plus.nativeUI.toast(this.$t("browser.tips.5"));
 						return;
 					}
-					plus.nativeUI.toast('已在后台打开');
+					plus.nativeUI.toast(this.$t("browser.tips.6"));
 					let wv = this.createWebView(e.url);
 					if (this.settingConfig.dormancy) {
 						wv.pause()
@@ -555,26 +640,30 @@
 				});
 				// 打开新窗口
 				uni.$on('OPEN-NEW-WINDOW', (url) => {
+
 					if (this.webviewList.length > this.maxWebview) {
-						plus.nativeUI.toast('已打开最大窗口数量');
+						plus.nativeUI.toast(this.$t("browser.tips.5"));
 						return;
 					}
 					this.homeUrl = this.newWebview;
 					let wv = null
-					if(url){
+					if (url) {
 						wv = this.createWebView(url);
-					}else{
+					} else {
 						wv = this.createWebView(this.homeUrl);
 					}
-					
+
 					this.resetWebview();
 					this.wvPause()
 					wv.resume()
 				});
 				// 关闭某个窗口
 				uni.$on('CLOSE-WINDOW', index => {
-					this.webviewList.splice(index, 1);
+					this.webviewList.splice(index, 1).forEach(_wv => {
+						_wv.close()
+					})
 					if (this.webviewList.length == 0) {
+						clearLastPage()
 						uni.redirectTo({
 							url: '../main/main',
 							animationType: 'fade-in'
@@ -591,11 +680,12 @@
 				});
 				// 关闭所有窗口
 				uni.$on('CLOSE-WINDOW-ALL', () => {
+					clearLastPage()
+					this.webviewList.length = 0;
 					uni.redirectTo({
 						url: '../main/main',
 						animationType: 'fade-in'
 					});
-					this.webviewList.length = 0;
 					// this.createWebView(this.homeUrl);
 					// this.resetWebview();
 				});
@@ -612,13 +702,16 @@
 						},
 						e => {
 							if (e.sure) {
-								plus.nativeUI.toast('快捷方式已创建');
+								plus.nativeUI.toast(this.$t("browser.tips.7"));
 							} else {
-								plus.nativeUI.toast('已尝试创建快捷方式');
+								plus.nativeUI.toast(this.$t("browser.tips.8"));
 							}
 						}
 					);
 				});
+
+
+
 				// 快捷方式打开
 				uni.$on('OPEN-Shortcut', e => {
 					this.webviewList[this.WVindex].loadURL(e.url);
@@ -627,17 +720,17 @@
 				uni.$on('HISTORY-MAKE', e => {
 					if (e.type == 0) {
 						if (this.webviewList.length > this.maxWebview) {
-							plus.nativeUI.toast('已打开最大窗口数量');
+							plus.nativeUI.toast(this.$t("browser.tips.5"));
 							return;
 						}
 						this.createWebView(e.url);
 						this.resetWebview();
 					} else if (e.type == 1) {
 						if (this.webviewList.length > this.maxWebview) {
-							plus.nativeUI.toast('已打开最大窗口数量');
+							plus.nativeUI.toast(this.$t("browser.tips.5"));
 							return;
 						}
-						plus.nativeUI.toast('已在后台打开');
+						plus.nativeUI.toast(this.$t("browser.tips.6"));
 						this.createWebView(e.url);
 					} else if (e.type == -1) {
 						this.webviewList[this.WVindex].loadURL(e.url);
@@ -716,65 +809,102 @@
 					this.removeDom(this.webviewList[this.WVindex]);
 				});
 				let downloadCurrent = this.settingConfig.downloadCurrent;
+
+				let allowableDonwload = true;
+
+				const action = {
+					download: 'download',
+					dlnaSearch: 'Dlan-search',
+					dlnaPlay: 'Dlan-play',
+					statistics: 'statistics'
+				}
+
 				// 监听网页返回的信息
 				uni.$on('WEB-MESSAGE', e => {
+					let actionType = e.action
+					switch (actionType) {
+						case action.download:
+							// 拦截自动下载
+							if (this.settingConfig.autoDownload) {
 
-					if (e.action == 'download') {
-						// 调用IDM+进行下载
-						let url = decodeURIComponent(e.url);
-						url = url.replace(/^(https:\/\/|http:\/\/)/g, '');
-						if (downloadCurrent == 1) {
-							let isInstallADM = plus.runtime.isApplicationExist({
-								pname: 'com.dv.adm.pay'
-							});
-							if (!isInstallADM) {
 								uni.showToast({
 									icon: 'none',
-									title: '你的手机似乎未安装ADM Pro'
+									title: this.$t("browser.tips.12")
 								});
 								return;
 							}
-							this.downloadADM(url);
-						} else if (downloadCurrent == 2) {
-							let isInstallIDM = plus.runtime.isApplicationExist({
-								pname: 'idm.internet.download.manager.plus'
+							// 调用IDM+进行下载
+							let url = decodeURIComponent(e.url);
+							url = url.replace(/^(https:\/\/|http:\/\/)/g, '');
+							if (downloadCurrent == 1) {
+								let isInstallADM = plus.runtime.isApplicationExist({
+									pname: 'com.dv.adm.pay'
+								});
+								if (!isInstallADM) {
+									uni.showToast({
+										icon: 'none',
+										title: this.$t("setting.tips.1")
+									});
+									return;
+								}
+								this.downloadADM(url);
+							} else if (downloadCurrent == 2) {
+								let isInstallIDM = plus.runtime.isApplicationExist({
+									pname: 'idm.internet.download.manager.plus'
+								});
+								if (!isInstallIDM) {
+									uni.showToast({
+										icon: 'none',
+										title: this.$t("setting.tips.2")
+									});
+									return;
+								}
+								this.downloadIDM(url);
+							}
+							break;
+						case action.dlnaSearch:
+							// dlan播放
+							let devList = [];
+							Dlan.search(result => {
+								if (result.type === 'add') {
+									devList.push({
+										id: result.id,
+										name: result.name
+									});
+								} else {
+									devList = devList.filter(x => x.id != result.id);
+								}
+								this.webviewList[this.WVindex].evalJS(`Dlan(${devList})`);
 							});
-							if (!isInstallIDM) {
-								uni.showToast({
-									icon: 'none',
-									title: '你的手机似乎未安装IDM+'
-								});
-								return;
-							}
-							this.downloadIDM(url);
-						}
-					} else if (e.action == 'Dlan-search') {
-						// dlan播放
-						let devList = [];
-						Dlan.search(result => {
-							if (result.type === 'add') {
-								devList.push({
-									id: result.id,
-									name: result.name
-								});
-							} else {
-								devList = devList.filter(x => x.id != result.id);
-							}
-							this.webviewList[this.WVindex].evalJS(`Dlan(${devList})`);
-						});
-					} else if (e.action == 'Dlan-play') {
-						let url = decodeURIComponent(e.url),
-							id = e.id,
-							title = e.title;
-						Dlan.play({
-							id,
-							url,
-							title
-						}, res => {
-							this.webviewList[this.WVindex].evalJS(`DlanComplate(${res})`);
-						});
+							break;
+						case action.dlnaPlay:
+							url = decodeURIComponent(e.url),
+								id = e.id,
+								title = e.title;
+							Dlan.play({
+								id,
+								url,
+								title
+							}, res => {
+								this.webviewList[this.WVindex].evalJS(`DlanComplate(${res})`);
+							});
+							break;
+						case action.statistics:
+							let statiData = e.data;
+							app.globalData.statiData = statiData;
+							break;
 					}
 				});
+				uni.$on('CLEAR-CACHE', () => {
+					this.webviewList[this.WVindex].evalJS(`
+					localStorage.clear();
+					var keys = document.cookie.match(/[^ =;]+(?=\=)/g);
+					if (keys) {
+						for (var i = keys.length; i--;) {
+							document.cookie = keys[i] + '=0;expires=' + new Date(0).toUTCString();
+						}
+					};`);
+				})
 				let overrideUrl = [];
 				// 监听资源加载
 				this.webviewList[this.WVindex].listenResourceLoading('', evt => {
@@ -819,8 +949,8 @@
 						return;
 					}
 					uni.showModal({
-						title: '提示',
-						content: '该网页想跳转其他应用是否允许？',
+						title: this.$t("browser.tips.10"),
+						content: this.$t("browser.tips.11"),
 						success: res => {
 							if (res.confirm) {
 								let a =
@@ -930,6 +1060,7 @@
 						text = txtContent;
 					}
 				}
+				uni.removeStorageSync('lastPage')
 				return text;
 			},
 			// 设置标题

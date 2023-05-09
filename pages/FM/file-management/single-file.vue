@@ -19,10 +19,10 @@
 			</view>	
 		</view>
 		<!-- 无数据页面 -->
-		<view class="no_data"  v-if="isData" style="text-align: center;">脚本文件放在script目录下，如果没有请新建一个</view>			
+		<view class="no_data"  v-if="isData" style="text-align: center;">{{$t("FM.tips.1")}}</view>			
 		<view class="uniBtn">
-			<button class="btn" type="default" v-if="false">返回</button>
-			<button class="btn btn-submit" :class="{disbled:disbled}"  @click="savePath">选定</button>
+			<button class="btn" type="default" v-if="false">{{$t("FM.tips.2")}}</button>
+			<button class="btn btn-submit" :class="{disbled:disbled}"  @click="savePath">{{$t("FM.tips.3")}}</button>
 		</view>				
 	</view>
 </template> 
@@ -56,7 +56,7 @@
 			if(opt.type){
 			   this.type = opt.type;				
 			}
-			uni.showLoading({title:'读取本地文件中...',mask:false});							
+			uni.showLoading({title:this.$t("FM.tips.4"),mask:false});							
             setTimeout(()=>{
 				this.getSDCardPath = fileFun.getSDCardPath();   //获得SD卡目录/mnt/sdcard（获取的是手机外置sd卡的路径）
 				this.getDataDirectoryPath = fileFun.getDataDirectoryPath();   //获得根目录/data (内部存储路径)	

@@ -1,9 +1,9 @@
 {
-    "name" : "Script浏览器",
+    "name" : "Script Browser",
     "appid" : "",
     "description" : "一款专门用于网页游戏的浏览器，提供本地脚本运行环境",
-    "versionName" : "2.4.5",
-    "versionCode" : 245,
+    "versionName" : "2.6.0",
+    "versionCode" : 2600,
     "transformPx" : false,
     "screenOrientation" : [
         "portrait-primary",

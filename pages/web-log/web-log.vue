@@ -1,7 +1,7 @@
 <template>
 	<view class="content">
 		<view class="bar">
-			<navigator url="/pages/override-resource-log/override-resource-log">查看已拦截的资源</navigator>
+			<navigator url="/pages/override-resource-log/override-resource-log">{{$t('weblog.override-resource')}}</navigator>
 		</view>
 		<view class="pick">
 			<picker mode="selector" :range="range" @change="bindChange">
@@ -10,7 +10,7 @@
 		</view>
 		<view v-for="(item, index) in showRes" :key="index" class="list" :data-index="index" @tap="change"
 			@longpress="longchange">
-			<view style="color: #cc6666;">类型：{{ item.type }}</view>
+			<view style="color: #cc6666;">{{$t('weblog.type')}}：{{ item.type }}</view>
 			{{ item.url }}
 		</view>
 	</view>
@@ -132,7 +132,7 @@
 			longchange(e) {
 				let index = e.currentTarget.dataset.index;
 				uni.showActionSheet({
-					itemList: ['拦截链接', '拦截域名', '复制链接', '下载', '投屏'],
+					itemList: [this.$t('weblog.itemList.0'), this.$t('weblog.itemList.1'),this.$t('weblog.itemList.2'),this.$t('weblog.itemList.3'), this.$t('weblog.itemList.4')],
 					success: res => {
 						let resRequest =[]
 						switch (res.tapIndex) {
@@ -180,7 +180,7 @@
 			},
 			createDownload(url) {
 				uni.showLoading({
-					title: '正在下载'
+					title:this.$t('weblog.tips.1')
 				})
 				var dtask = plus.downloader.createDownload(url, {
 					filename: '_downloads/'
@@ -189,11 +189,11 @@
 					uni.hideLoading()
 					if (status == 200) {
 						uni.showModal({
-							content: '下载成功，文件保存路径:' + d.filename
+							content:this.$t('weblog.tips.2') + d.filename
 						});
 					} else {
 						uni.showModal({
-							content: '下载出错了'
+							content: this.$t('weblog.tips.3')
 						});
 						console.log('Download failed: ' + status);
 					}

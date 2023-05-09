@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="top-bar"><view @click="clearAll">清空</view></view>
+		<view class="top-bar"><view @click="clearAll">{{$t("history.tips.1")}}</view></view>
 		<view class="list-content">
 			<view class="list" v-for="(item, index) in history" :key="index" @longpress="more(item, index)" @click="tonav(item.url)">
 				<view class="title">{{ item.title }}</view>
@@ -26,7 +26,7 @@ export default {
 	methods: {
 		clearAll() {
 			uni.showModal({
-				content: '确认清空',
+				content:this.$t("history.tips.2"),
 				success: res => {
 					if (res.confirm) {
 						this.history = [];
@@ -52,7 +52,7 @@ export default {
 		},
 		more(item, index) {
 			uni.showActionSheet({
-				itemList: ['新窗口打开', '后台打开', '删除', '复制链接'],
+				itemList: [this.$t("history.tips.3"), this.$t("history.tips.4"),this.$t("history.tips.5"), this.$t("history.tips.6")],
 				success: res => {
 					if (res.tapIndex == 2) {
 						this.history.splice(index, 1);
@@ -61,7 +61,7 @@ export default {
 						uni.setClipboardData({
 							data: item.url,
 							success: res => {
-								plus.nativeUI.toast('已复制到剪切板');
+								plus.nativeUI.toast(this.$t("history.tips.7"));
 							}
 						});
 					} else {

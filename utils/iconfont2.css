@@ -1,0 +1,138 @@
+@font-face {
+  font-family: "ccfffasd"; /* Project id 2480200 */
+  src: url('http://at.alicdn.com/t/c/font_2480200_02rjzmzqyi7c.woff2?t=1682562954189') format('woff2'),
+       url('http://at.alicdn.com/t/c/font_2480200_02rjzmzqyi7c.woff?t=1682562954189') format('woff'),
+       url('http://at.alicdn.com/t/c/font_2480200_02rjzmzqyi7c.ttf?t=1682562954189') format('truetype');
+}
+
+.ccfffasd {
+  font-family: "ccfffasd" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-xinxi:before {
+  content: "\e649";
+}
+
+.icon-bianji:before {
+  content: "\e652";
+}
+
+.icon-sousuo:before {
+  content: "\e651";
+}
+
+.icon-fenping:before {
+  content: "\e6a0";
+}
+
+.icon-sousuowutu:before {
+  content: "\e635";
+}
+
+.icon-xiazai1:before {
+  content: "\e60c";
+}
+
+.icon-quanping:before {
+  content: "\e61f";
+}
+
+.icon-tianjiashoucang:before {
+  content: "\e659";
+}
+
+.icon-icon-:before {
+  content: "\e602";
+}
+
+.icon-yejian:before {
+  content: "\e6ed";
+}
+
+.icon-shezhi1:before {
+  content: "\e655";
+}
+
+.icon-tubiaozhizuomoban-12:before {
+  content: "\e604";
+}
+
+.icon-gongju1:before {
+  content: "\e65a";
+}
+
+.icon-hide:before {
+  content: "\e662";
+}
+
+.icon-yinsi:before {
+  content: "\e676";
+}
+
+.icon-down:before {
+  content: "\e60a";
+}
+
+.icon-liebiao1:before {
+  content: "\e612";
+}
+
+.icon-liebiao:before {
+  content: "\e613";
+}
+
+.icon-yingyongzhongxin:before {
+  content: "\e63f";
+}
+
+.icon-stop:before {
+  content: "\e62b";
+}
+
+.icon-home:before {
+  content: "\e617";
+}
+
+.icon-more:before {
+  content: "\e654";
+}
+
+.icon-right1:before {
+  content: "\e608";
+}
+
+.icon-left:before {
+  content: "\e609";
+}
+
+.icon-right:before {
+  content: "\e77c";
+}
+
+.icon-xiazai:before {
+  content: "\e60e";
+}
+
+.icon-shuqian:before {
+  content: "\e686";
+}
+
+.icon-gongju:before {
+  content: "\e6fa";
+}
+
+.icon-add:before {
+  content: "\e742";
+}
+
+.icon-lishi:before {
+  content: "\e603";
+}
+
+.icon-shezhi:before {
+  content: "\e60b";
+}

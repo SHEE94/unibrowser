@@ -1,8 +1,8 @@
 <template>
 	<view class="inter-content">
-		<view class="defaultbtn" @tap="clearALL">清空所有</view>
-		<view class="defaultbtn" @tap="toOverriurl">跳转拦截规则</view>
-		<view class="defaultbtn" @tap="addUrl">添加拦截域名</view>
+		<view class="defaultbtn" @tap="clearALL">{{$t('inter.clearALL')}}</view>
+		<view class="defaultbtn" @tap="toOverriurl">{{$t("inter.toOverriurl")}}</view>
+		<view class="defaultbtn" @tap="addUrl">{{$t("inter.addUrl")}}</view>
 		<uni-list>
 		    <uni-list-item :title="item.hostname" :note="item.classList.join(',')" v-for="(item,index) in adList" :clickable="true" :key="index" @click="del(index)"></uni-list-item>
 		</uni-list>
@@ -22,7 +22,7 @@
 			del(index){
 				console.log(index)
 				uni.showModal({
-					content:'是否删除',
+					content:this.$t("inter.tips.1"),
 					success: (res) => {
 						if(res.confirm){
 							this.adList.splice(index,1);

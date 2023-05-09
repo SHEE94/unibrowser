@@ -3,21 +3,22 @@
 		<view class="list-content">
 			<view class="url-text" v-if="href && href != 'undefined'">{{href}}</view>
 			<template v-if="href && href != 'undefined'">
-				<view class="btn" @click="menuChange('openBg',href)">后台打开</view>
-				<view class="btn" @click="menuChange('openNew',href)">新窗口打开</view>
-				<view class="btn" @click="menuChange('copyLink',href)">复制链接</view>
-				<view class="btn" @click="menuChange('overrLink',href)">拦截链接</view>
-				<view class="btn" @click="menuChange('adurl')">拦截该网址</view>
-				<view class="btn" @click="menuChange('copyText')">复制链接文本</view>
+				<view class="btn" @click="menuChange('openBg',href)">{{$t("menu.background.open")}}</view>
+				<view class="btn" @click="menuChange('openNew',href)">{{$t("menu.new.open")}}</view>
+				<view class="btn" @click="menuChange('copyLink',href)">{{$t("menu.copy.link")}}</view>
+				<view class="btn" @click="menuChange('overrLink',href)">{{$t("menu.inter.link")}}</view>
+				<view class="btn" @click="menuChange('adurl')">{{$t("menu.inter.website")}}</view>
+				<view class="btn" @click="menuChange('copyText')">{{$t("menu.copy.link.text")}}</view>
 			</template>
 			<template v-if="src && src != 'undefined'">
-				<view class="btn" @click="menuChange('saveImg')">保存图片</view>
-				<view class="btn" @click="menuChange('preview')">预览图片</view>
-				<view class="btn" @click="menuChange('copyImgLink',src)">复制图片链接</view>
-				<view v-if="tag == 'VIDEO'" class="btn" @click="menuChange('openVideo',src)">使用播放器打开</view>
+				<view class="btn" @click="menuChange('saveImg')">{{$t("menu.save.img")}}</view>
+				<view class="btn" @click="menuChange('preview')">{{$t("menu.preivew.img")}}</view>
+				<view class="btn" @click="menuChange('copyImgLink',src)">{{$t("menu.copy.img")}}</view>
+				<view v-if="tag == 'VIDEO'" class="btn" @click="menuChange('openVideo',src)">{{$t("menu.open.play")}}
+				</view>
 			</template>
-			<view class="btn" @click="menuChange('copyChangeText')">复制文本</view>
-			<view class="btn" @click="menuChange('ad')">标记为广告</view>
+			<view class="btn" v-if="text && text != 'undefined'" @click="menuChange('copyChangeText')">{{$t("menu.copy.text")}}</view>
+			<view class="btn" @click="menuChange('ad')">{{$t("menu.ad")}}</view>
 		</view>
 	</view>
 </template>
@@ -29,13 +30,13 @@
 		data() {
 			return {};
 		},
-	
+
 		methods: {
 			clipText(text) {
 				uni.setClipboardData({
 					data: text,
 					success: (res) => {
-						plus.nativeUI.toast('已复制到剪切板');
+						plus.nativeUI.toast(this.$t("menu.copy.clip"));
 					}
 				})
 			},
@@ -47,8 +48,8 @@
 						})
 						break;
 					case 'openNew':
-					uni.$emit('OPEN-NEW-WINDOW',this.href);
-					break;
+						uni.$emit('OPEN-NEW-WINDOW', this.href);
+						break;
 					case 'copyImgLink':
 						this.clipText(this.src)
 						break;
@@ -71,14 +72,15 @@
 								uni.saveImageToPhotosAlbum({
 									filePath: path,
 									success: (res) => {
-										plus.nativeUI.toast('文件已保存');
+										plus.nativeUI.toast(this.$t("menu.tips.1"));
 									},
 									fail: (res) => {
-										plus.nativeUI.toast('未获得授权');
+										plus.nativeUI.toast(this.$t("menu.tips.2"));
 										uni.saveFile({
 											tempFilePath: path,
 											success: (res) => {
-												plus.nativeUI.toast('文件保存路径：' + res
+												plus.nativeUI.toast(this.$t(
+														"menu.tips.3") + '：' + res
 													.savedFilePath);
 											}
 										})
@@ -152,7 +154,7 @@
 
 		.list-content {
 			position: fixed;
-			width: 45%;
+			width: 55%;
 			background: #fefefe;
 			padding: 15px;
 			border-radius: 10px;
@@ -160,10 +162,9 @@
 			top: 50%;
 			transform: translate(-50%, -50%);
 			// border:1px solid #ccc;
-			box-shadow: 0 0 20upx 2upx #c0c0c0;
+			box-shadow: 0 0 20px 0px #515151;
 			max-height: 90%;
 			overflow-y: auto;
-			border: 1px solid #eee;
 
 			.url-text {
 				font-size: 12px;

@@ -1,6 +1,6 @@
 <template>
 	<view class="content">
-		<view v-if="scriptList.length == 0&&script_dir_file.length == 0&&onlineScript.length==0" style="top: 80upx;color: #666666;font-size: 28upx;text-align: center;width: 100%;">空空如也
+		<view v-if="scriptList.length == 0&&script_dir_file.length == 0&&onlineScript.length==0" style="top: 80upx;color: #666666;font-size: 28upx;text-align: center;width: 100%;">{{$t("script.tips.1")}}
 		</view>
 		<view class="list" v-for="(item, index) in onlineScript" :key="'v_1'+index" :data-index="index" @click="changeScriptOnline" v-if="item.installPath">
 			<view class="left-info">
@@ -9,14 +9,14 @@
 			<view class="arr"><icon :type="item.active ? 'success' : 'cancel'" size="20"></icon></view>
 		</view>
 		
-		<view style="padding: 15px;background-color: #F7F7F7;margin-top: 15px;border-bottom: 1px solid #CCCC77;" v-if="scriptList.length > 0">自定义脚本</view>
+		<view style="padding: 15px;background-color: #F7F7F7;margin-top: 15px;border-bottom: 1px solid #CCCC77;" v-if="scriptList.length > 0">{{$t("script.tips.2")}}</view>
 		<view class="list" v-for="(item, index) in scriptList" :key="index" :data-index="index" @click="showmodal">
 			<view class="left-info">
 				<view class="label">{{ item.name }}</view>
 			</view>
 			<view class="arr"><icon :type="item.active ? 'success' : 'cancel'" size="20"></icon></view>
 		</view>
-		<view style="padding: 15px;background-color: #F7F7F7;margin-top: 15px;border-bottom: 1px solid #CCCC77;" v-if="script_dir_file.length > 0">本地脚本</view>
+		<view style="padding: 15px;background-color: #F7F7F7;margin-top: 15px;border-bottom: 1px solid #CCCC77;" v-if="script_dir_file.length > 0">{{$t("script.tips.3")}}</view>
 		<view class="list" v-for="(s_self, index_2) in script_dir_file" :key="'v-' + index_2" :data-index="index_2" @click="changeScriptFile">
 			<view class="left-info">
 				<view class="label">{{ s_self.filename }}</view>
@@ -24,7 +24,7 @@
 			<view class="arr"><icon :type="s_self.active ? 'success' : 'cancel'" size="20"></icon></view>
 		</view>
 		<view style="font-size: 11px;color: #ccc;text-align: center;padding: 20px;">
-			脚本虽好，可不要贪多哦
+			{{$t("script.tips.4")}}
 		</view>
 	</view>
 </template>
@@ -36,7 +36,7 @@ export default {
 			scriptList: [],
 			script_dir_file: [],
 			onlineScript:[],
-			execute:['页面创建','页面加载完成'],
+			execute:[this.$t("script.tips.5"),this.$t("script.tips.6")],
 			checked:false,
 			index:0
 		};
@@ -60,7 +60,7 @@ export default {
 			let active = this.scriptList[index].active;
 		
 			uni.showActionSheet({
-				itemList:[`${active?'关闭':'启用'}`,'编辑','删除'],
+				itemList:[`${active?this.$t("script.tips.7"):this.$t("script.tips.8")}`,this.$t("script.tips.9"),this.$t("script.tips.10")],
 				success: (res) => {
 					if(res.tapIndex == 0){
 						this.scriptList[index].active = !this.scriptList[index].active
@@ -80,7 +80,7 @@ export default {
 			let index = e.currentTarget.dataset.index;
 			let active = this.script_dir_file[index].active;
 			uni.showActionSheet({
-				itemList:[`${active?'关闭':'启用'}`,'删除'],
+				itemList:[`${active?this.$t("script.tips.7"):this.$t("script.tips.8")}`,this.$t("script.tips.10")],
 				success: (res) => {
 					if(res.tapIndex == 0){
 						this.script_dir_file[index].active = !this.script_dir_file[index].active
@@ -96,7 +96,7 @@ export default {
 			let index = e.currentTarget.dataset.index;
 			let active = this.onlineScript[index].active;
 			uni.showActionSheet({
-				itemList:[`${active?'关闭':'启用'}`,'删除'],
+				itemList:[`${active?this.$t("script.tips.7"):this.$t("script.tips.8")}`,this.$t("script.tips.10")],
 				success: (res) => {
 					if(res.tapIndex == 0){
 						this.onlineScript[index].active = !this.onlineScript[index].active

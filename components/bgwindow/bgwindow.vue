@@ -7,12 +7,12 @@
 						<image v-if="yinsi" src="../../static/hide.png" mode="widthFix" style="width: 20px;margin-right: 5px;"></image>
 						{{ item.getTitle() }}
 					</view>
-					<view style="color: #999;" @click="close(item, index)">关闭</view>
+					<view style="color: #999;" @click="close(item, index)">{{$t("bgwindow.close.window")}}</view>
 				</view>
 			</view>
 			<view class="btn-list">
-				<view class="btn" @click="openNew">新建窗口</view>
-				<view class="btn" @click="closeAll">全部关闭</view>
+				<view class="btn" @click="openNew">{{$t("bgwindow.open.window")}}</view>
+				<view class="btn" @click="closeAll">{{$t("bgwindow.closeall.window")}}</view>
 			</view>
 		</view>
 	</view>
@@ -41,6 +41,7 @@ export default {
 			this.$emit('close');
 		},
 		openNew() {
+			console.log('open new')
 			uni.$emit('OPEN-NEW-WINDOW');
 			this.$emit('close');
 		},
@@ -95,7 +96,7 @@ export default {
 			}
 		}
 		.active {
-			background: #eee;
+			background: #9dcac9;
 
 			box-sizing: border-box;
 			border-radius: 4px;

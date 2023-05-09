@@ -37,7 +37,7 @@
 		}, {
 			"path": "pages/hitory/hitory",
 			"style": {
-				"navigationBarTitleText": "浏览历史",
+				"navigationBarTitleText": "%pages.browser.history%",
 				"enablePullDownRefresh": false
 			}
 
@@ -86,7 +86,7 @@
 		}, {
 			"path": "pages/script-list/script-list",
 			"style": {
-				"navigationBarTitleText": "脚本扩展",
+				"navigationBarTitleText": "%pages.script%",
 				"enablePullDownRefresh": false
 			}
 
@@ -108,14 +108,14 @@
 			"path": "pages/bookmark/bookmark",
 			"style": {
 
-				"navigationBarTitleText": "书签",
+				"navigationBarTitleText": "%pages.bookmark%",
 				"enablePullDownRefresh": false
 			}
 
 		}, {
 			"path": "pages/intercept/intercept",
 			"style": {
-				"navigationBarTitleText": "拦截记录",
+				"navigationBarTitleText": "%pages.inter.log%",
 				"enablePullDownRefresh": false
 			}
 
@@ -138,7 +138,7 @@
 			"path": "pages/about/about",
 			"style": {
 
-				"navigationBarTitleText": "关于",
+				"navigationBarTitleText": "%pages.about%",
 				"enablePullDownRefresh": false
 			}
 
@@ -184,7 +184,8 @@
 			"path": "pages/main/setting_in_main/setting_in_main",
 			"style": {
 				"navigationBarTitleText": "",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
 			}
 
 		},
@@ -219,6 +220,16 @@
             {
                 "navigationBarTitleText": "下载管理",
                 "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/website-info/website-info",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "网站信息",
+                "enablePullDownRefresh": false,
+				"navigationStyle": "custom"
             }
             
         }
