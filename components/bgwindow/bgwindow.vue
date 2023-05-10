@@ -2,12 +2,12 @@
 	<view>
 		<view class="bg-content">
 			<view class="list-content" :class="show">
-				<view class="list" v-for="(item, index) in list" :key="index">
+				<view class="list" :class="list.length-1 == index?'active':''" v-for="(item, index) in list" :key="index">
 					<view class="title" @click="openBgWebview(index)">
 						<image v-if="yinsi" src="../../static/hide.png" mode="widthFix" style="width: 20px;margin-right: 5px;"></image>
 						{{ item.getTitle() }}
 					</view>
-					<view style="color: #999;" @click="close(item, index)">{{$t("bgwindow.close.window")}}</view>
+					<view style="color: #999;" class="close" @click="close(item, index)">{{$t("bgwindow.close.window")}}</view>
 				</view>
 			</view>
 			<view class="btn-list">
@@ -96,10 +96,14 @@ export default {
 			}
 		}
 		.active {
-			background: #9dcac9;
-
+			background: #008eaa;
+			
 			box-sizing: border-box;
-			border-radius: 4px;
+			border-radius: 10px;
+			.title,.close{
+				color: #fff!important;
+			}
+			
 		}
 	}
 	.ac {

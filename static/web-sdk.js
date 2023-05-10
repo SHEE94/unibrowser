@@ -2,7 +2,10 @@
 try {
 	(function() {
 		const startTime = Date.now()
-		let cgsdk = function() {
+		cgsdk = function() {
+
+			console.log('SDK LOADED')
+			window.WEB_SDK_LOADED = true;
 			plus.share = null;
 			plus.payment = null;
 			plus.messaging = null;
@@ -383,6 +386,9 @@ try {
 					if (tagname.toLocaleLowerCase() == 'script') {
 						$websiteStatistics.addScript()
 					}
+					if (tagname.toLocaleLowerCase() == 'a') {
+						$websiteStatistics.addLink()
+					}
 					$websiteStatistics.addNodes()
 					return _appendChild.apply(this, arguments);
 				}
@@ -393,11 +399,11 @@ try {
 						if (tagname.toLocaleLowerCase() == 'script') {
 							$websiteStatistics.addScript()
 						}
-						$websiteStatistics.addNodes()
 						if (tagname.toLocaleLowerCase() == 'a') {
 							$websiteStatistics.addLink()
 						}
 					}
+					$websiteStatistics.addNodes()
 
 					return _appendChild.apply(this, arguments);
 				}
@@ -462,25 +468,29 @@ try {
 
 			// ++++++++++++++++++++++++++++++++++
 			otherWebsite()
-			window.WebKitMutationObserver ||
-				window.MozMutationObserver;
 
-			const observeMutationSupport = !!MutationObserver;
-			if (observeMutationSupport) {
-				let observer = new MutationObserver(function(records) {
-					otherWebsite()
-				});
-				let body = document.querySelector('body')
-				observer.observe(body, {
-					'childList': true,
-					'subtree': true
-				})
-			}
+			window.addEventListener('DOMContentLoaded', function() {
+
+				window.WebKitMutationObserver ||
+					window.MozMutationObserver;
+
+				const observeMutationSupport = !!MutationObserver;
+				if (observeMutationSupport) {
+					let observer = new MutationObserver(function(records) {
+						otherWebsite()
+					});
+					let body = document.querySelector('body')
+					observer.observe(body, {
+						'childList': true,
+						'subtree': true
+					})
+				}
+			})
 
 			// +++++++++++++++++++++++++++++++++++++
-			
-			
-			
+
+
+
 
 			// 动态脚本
 			function addScript() {
@@ -531,6 +541,8 @@ try {
 				return tages;
 			}
 
+
+			let timeOutEvent = null;
 			const longShow = function(target) {
 
 
@@ -580,13 +592,14 @@ try {
 					}
 
 				})
-
+				clearTimeout(timeOutEvent)
+				plus.device.vibrate();
 				window.webviewCG.webView.navigateTo({
 					url: '/pages/popup/popup' + Param
 				})
 
 			}
-			let timeOutEvent = null;
+			
 			let longClick = function() {
 
 				let longTarget = null;
@@ -623,6 +636,7 @@ try {
 				};
 
 				let longPress = function(e) {
+
 					timeOutEvent = null;
 					// 长按
 					webSDK.getLongCLickTarget && webSDK.getLongCLickTarget(longTarget)
@@ -631,7 +645,10 @@ try {
 				document.addEventListener('touchmove', gtouchmove);
 				document.addEventListener('touchend', gtouchend);
 				document.addEventListener('touchcancel', gtouchmove)
+				document.addEventListener('blur',gtouchmove)
+				window.addEventListener('scroll',gtouchmove)
 				document.addEventListener('mousecancel', gtouchmove)
+				
 			}
 			window.alert = function() {
 				timeOutEvent && clearTimeout(timeOutEvent);
@@ -664,14 +681,13 @@ try {
 			}
 		}
 
-		if (window.plus) {
-			cgsdk();
-		} else {
-			document.addEventListener('plusready', cgsdk, false);
+		if (!window.WEB_SDK_LOADED) {
+			window.plus ? cgsdk() : document.addEventListener('plusready', cgsdk, false);
 		}
+
 	})()
 } catch (e) {
 	//TODO handle the exception
 	console.log('SDK load fail')
-	console.warn(JSON.stringify(e))
+	console.warn(JSON.stringify(e.message))
 }

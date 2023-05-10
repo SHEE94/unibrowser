@@ -226,24 +226,25 @@
 			display: flex;
 			align-items:center;
 			padding: 15px 0;
-			border-bottom: 1px solid #999;
+			border-bottom: 1px solid #f7f7f7;
 			.title {
-				font-size: 30px;
-				width: 70%;
+				// font-size: 22px;
+				width: 50%;
 				margin-right: 5px;
+				text-align: right;
 			}
 
 			.text {
-				font-size: 22px;
+				font-size: 14px;
 				color: #999;
 			}
 
 			.font24 {
-				font-size: 22px;
+				// font-size: 20px;
 			}
 
 			.font20 {
-				font-size: 20px;
+				font-size: 16px;
 				color: #008585;
 			}
 		}
@@ -251,7 +252,7 @@
 			
 			padding-top: 15px;
 			.website-setting-title{
-				font-size: 30px;
+				font-size: 20px;
 				
 			}
 			.list {

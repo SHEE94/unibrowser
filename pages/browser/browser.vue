@@ -86,6 +86,7 @@
 		},
 		onHide() {
 			this.offResize();
+			this.wvPause()
 		},
 		deactivated() {
 			this.offResize();
@@ -95,6 +96,10 @@
 		},
 		onShow() {
 			this.windowResize();
+			if(this.webviewList[this.WVindex]){
+				this.webviewList[this.WVindex].resume()
+			}
+			
 		},
 		onUnload() {
 			this.offListener();
@@ -409,8 +414,6 @@
 						this.saveLastPageInfo(wv)
 					}
 
-					wv.addEventListener('progressChanged')
-
 
 					// 拦截资源加载
 					this.overrideResourceRequest(wv);
@@ -420,7 +423,8 @@
 					// wv.appendJsFile('_www/static/script/videoBtn.js');
 
 					wv.addEventListener('loading', e => {
-
+						// 重新加载时清空资源记录
+						app.globalData.allRes = this.allRes = [];
 						// ===================设置项 ========================
 						this.settingConfig = uni.getStorageSync('settingConfig');
 						if (this.settingConfig.location) {
@@ -470,9 +474,7 @@
 						}
 						// 加载新数据停止下拉刷新
 						wv.endPullToRefresh();
-						// 重新加载时清空资源记录
-
-						app.globalData.allRes = this.allRes = [];
+						
 					});
 
 					wv.addEventListener('loaded', e => {
@@ -905,7 +907,7 @@
 						}
 					};`);
 				})
-				let overrideUrl = [];
+				
 				// 监听资源加载
 				this.webviewList[this.WVindex].listenResourceLoading('', evt => {
 					if (this.settingConfig.resLog) {

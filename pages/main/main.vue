@@ -294,12 +294,9 @@
 
 			inputsearch(e) {
 				let val = e.detail.value;
-				console.log(val)
 				this.showHistory = []
-				if (!val) {
-					this.showHistory = []
-					return
-				};
+				if (!val)return;
+				
 
 				debounce((val) => {
 					searchKeyword(val).then(res => {
@@ -496,13 +493,15 @@
 		justify-content: space-between;
 		transform: scale(0);
 		opacity: 0;
-
+		.tips{
+			font-size: 10px;
+		}
 		.btns {
 			display: flex;
-			width: 30%;
+			width: 25%;
 			justify-content: space-between;
 			align-items: center;
-
+			font-size: 12px;
 			.btn {
 				border-radius: 10px;
 				padding: 0 10px;
