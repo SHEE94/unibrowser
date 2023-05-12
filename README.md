@@ -17,6 +17,29 @@ uni.navigateTo({
 ```
 这是放在pages目录的前提下，放在其他地址的话，跳转的时候自行修改浏览器的目录地址
 
+## 浏览器消息总线
+
+浏览器执行操作时发出的各种事件，可以通过监听不同事件实现不同功能组合,通过uniapp的uni.$on()和uni.$emit()页面通信对事件进行监听
+
+
+| 类型	| 说明				| 事件名			| 参数/返回值					|
+| ----	|----				| ----				| ----					|
+| $on	| 来自网页消息		| WEB-MESSAGE		| Object< T >				|
+| $emit	|打开后台窗口		| OPEN-BG			| Object<{url:string}>	|
+| $emit	|刷新网页			| RELOAD			| -						|
+| $emit	|打开新窗口			| OPEN-NEW-WINDOW	| url:string			|
+| $emit	|关闭某个窗口		| CLOSE-WINDOW		| index:number			|
+| $emit	|关闭所有窗口		| CLOSE-WINDOW-ALL	| -						|
+| $emit	|点击书签链接		| BOOK-MARK			|  Object<{url:string}>	|
+| $emit	|切换后台窗口		| SWITCH-WEBVIEW	| Object<{index:number}>|
+| $emit	|全屏				| FULL				| boolean				|
+| $emit	|加载链接			| LOAD-URL			|  Object<{url:string}>	|
+| $emit	|触发网页清除广告	| AD				| -						|
+| $emit	|清除网页缓存				| CLEAR-CACHE				| -				|
+| $on	|网页长按事件返回消息				| WEB-ACTION				| ```Object<{type:string,from:string,hostname:string,className:string,href:string,text:string,src:string}>```				|
+
+
+
 
 ## 脚本开发
 
@@ -33,42 +56,8 @@ if (window.webSDK) {
 }
 ```
 
-#### 模拟触摸：
-### touchSimulation()
-构造函数
-```
-new touchSimulation(element)
-```
-#### 参数
-| 参数 | 类型 | 必填 | 说明 |
-| :-----| ---- | :---- |:---- |
-| element | HTMLElement | 是 | 需要模拟触摸的元素 |
-#### 方法
-+ touchLeft()
- > 左滑
-+ touchRight()
- >右滑
-+ touchTop()
- >上滑
-+ touchBottom()
- >下滑
-+ touchClick()
- > 点击
 
-+ touchTo(startX, startY, endX, endY)
- >指定坐标滑动
- >>startX :触摸开始的x坐标
- >> startY :触摸开始的y坐标
- >>endX :结束的x坐标
- >>endY ：结束的y坐标
-
-+ 示例
-```
-var touchSimulation = new touchSimulation(document.querySelector('#container'));
-     touchSimulation.touchTo(0,0,400,0);
-```
-
-## SDK方法
+## WEB-SDK方法
 ### 本地数据储存
 ### storage
 storage本地数据储存持久化，不会因为用户清除网页数据而被清除，除非自己手动删除
@@ -206,7 +195,7 @@ webSDK.openSystemPlayer(src)
 
 ## 浏览器长按事件
 ### getLongCLickTarget
-监听浏览器长按事件，注意，一旦监听了这个事件，系统的长按事件将失效
+监听浏览器长按事件，注意，一旦监听了这个事件，系统的长按事件将失效,推荐使用WEB-ACTION进行监听
 
 
 #### 示例
@@ -344,7 +333,7 @@ const storage = webSDK.DownloadListener = (url)=>{
 
 [GITHUB源码](https://github.com/SHEE94/unibrowser)
 
-[app下载](https://github.com/SHEE94/unibrowser/releases/tag/browser)
+[app下载](https://github.com/SHEE94/unibrowser/releases)
 
 [安卓原生打包工程地址](https://pan.baidu.com/s/1LzNzTwMse_2eE4UEqqsCYg?pwd=9999)
 
