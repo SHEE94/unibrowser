@@ -6,17 +6,18 @@ try {
 
 			console.log('SDK LOADED')
 			window.WEB_SDK_LOADED = true;
+			const version = '2.0.0';
 			plus.share = null;
 			plus.payment = null;
 			plus.messaging = null;
 			plus.contacts = null;
 			plus.gallery = null;
 			plus.push = null;
-			let webview = plus.webview.currentWebview();
+			const webview = plus.webview.currentWebview();
 			const storage = plus.storage;
 			const _setTimeout = window.setTimeout
 
-			let require = function(src) {
+			const require = function(src) {
 				if (!src) return;
 				return new Promise(function(resolve, reject) {
 					let s = document.createElement('script', {
@@ -41,6 +42,7 @@ try {
 
 			const webSDK = {
 				current: webview,
+				version:version,
 				sendMessage: function(obj) {
 					window.webviewCG.webView.postMessage({
 						data: {
@@ -72,7 +74,7 @@ try {
 					}
 				}
 			};
-
+			
 
 			let touchX = 0;
 			let touchY = 0;
@@ -593,7 +595,7 @@ try {
 
 				})
 				clearTimeout(timeOutEvent)
-				plus.device.vibrate();
+				
 				window.webviewCG.webView.navigateTo({
 					url: '/pages/popup/popup' + Param
 				})
