@@ -5,7 +5,7 @@
 	// import {
 	// 	ADBlock
 	// } from './utils/ADBlock.js';
-import settingConfigFile from '@/utils/settingConfig.js';
+	import settingConfigFile from '@/utils/settingConfig.js';
 	export default {
 		globalData: {
 			// appUpdate: update,
@@ -13,16 +13,16 @@ import settingConfigFile from '@/utils/settingConfig.js';
 				return false;
 				// return ADBlock.isAd(url);
 			},
-			settingConfig:settingConfigFile,
+			settingConfig: settingConfigFile,
 			Dlan: {},
-			lastPage:[],
-			
+			lastPage: [],
+
 		},
 		onLaunch: function() {
-			
+
 			this.globalData.Dlan = uni.requireNativePlugin('JX-Dlna');
 
-			
+
 			let settingConfig = uni.getStorageSync('settingConfig');
 			if (!settingConfig) {
 				uni.setStorageSync('settingConfig', this.globalData.settingConfig);
@@ -37,30 +37,20 @@ import settingConfigFile from '@/utils/settingConfig.js';
 				'Mozilla/5.0 (Linux; Android 7.1.2; V1923A Build/N2G47O; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/68.0.3440.70 Mobile Safari/537.36 SCRIPT/2.0';
 			plus.navigator.setUserAgent(ua, false);
 
-			if (arg) {
-				if (typeof arg == 'string') {
-					arg = JSON.parse(arg);
-				}
-				if (arg.url) {
-					uni.$emit('OPEN-Shortcut', {
-						url: arg.url
-					});
-				}
-				if (arg.targeturl) {
-					uni.navigateTo({
-						url: '/pages/browser/browser?url=' + arg.targeturl,
-						animationType: 'fade-in'
-					});
-				}
-			}
-			
+			this.getIntentData(arg)
+
 			plus.navigator.closeSplashscreen();
-			
+
 		},
 		onShow: function() {
 
 			plus.globalEvent.addEventListener('newintent', () => {
 				let arg = plus.runtime.arguments;
+				this.getIntentData(arg)
+			});
+		},
+		methods:{
+			getIntentData(arg){
 				if (typeof arg == 'string') {
 					try {
 						arg = JSON.parse(arg);
@@ -74,15 +64,21 @@ import settingConfigFile from '@/utils/settingConfig.js';
 						animationType: 'fade-in'
 					});
 				}
+				if (arg.url) {
+					uni.navigateTo({
+						url: '/pages/browser/browser?url=' + arg.url,
+						animationType: 'fade-in'
+					});
+				}
 				if (typeof arg === 'string' && arg.length > 0) {
 					uni.navigateTo({
 						url: '/pages/browser/browser?url=' + arg,
 						animationType: 'fade-in'
 					});
 				}
-			});
+			}
 		}
-		
+
 	};
 </script>
 

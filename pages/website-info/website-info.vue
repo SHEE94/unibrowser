@@ -139,6 +139,16 @@
 					</view>
 				</view>
 				
+				<view class="header-config">
+					<view class="left-info">
+						<view class="label">{{ $t("webite.additionalHttpHeaders") }}({{$t("website.tips.5")}})</view>
+					</view>
+					<view class="arr">
+						<textarea :value="settingConfig.additionalHttpHeaders" cols="30" rows="10" :placeholder='$t("website.tips.5")' @input="headerConfig"></textarea>
+						<!-- <switch :checked="settingConfig.additionalHttpHeaders" data-type="additionalHttpHeaders" @change="change" /> -->
+					</view>
+				</view>
+				
 				<view class="list">
 					<view class="left-info">
 						<view class="label">Developer</view>
@@ -197,11 +207,26 @@
 		},
 		methods:{
 			save(){
+				try{
+					JSON.parse(this.settingConfig.additionalHttpHeaders)
+				}catch(e){
+					console.log(e)
+					//TODO handle the exception
+					uni.showToast({
+						icon:'error',
+						title:'Headers fail'
+					})
+					return;
+				}
 				this.websiteSettingList[this.info.host] = this.settingConfig
 				uni.setStorageSync('websiteSetting',this.websiteSettingList)
 				uni.showToast({
 					icon:'success'
 				})
+			},
+			headerConfig(e){
+				let val = e.detail.value;
+				this.settingConfig.additionalHttpHeaders = val;
 			},
 			change(e) {
 				let val = e.detail.value;
@@ -254,6 +279,22 @@
 			.website-setting-title{
 				font-size: 20px;
 				
+			}
+			.header-config{
+				padding: 7px 10px;
+				background-color: #f7f7f7;
+				margin-bottom: 10px;
+				.left-info {
+					.desc {
+						font-size: 10px;
+						color: #999;
+					}
+					.icon {
+						margin-right: 5px;
+						font-size: 15px;
+						margin-bottom: -2px;
+					}
+				}
 			}
 			.list {
 				display: flex;

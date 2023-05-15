@@ -36,8 +36,8 @@ uni.navigateTo({
 | $emit	|加载链接			| LOAD-URL			|  Object<{url:string}>	|
 | $emit	|触发网页清除广告	| AD				| -						|
 | $emit	|清除网页缓存				| CLEAR-CACHE				| -				|
-| $on	|网页长按事件返回消息				| WEB-ACTION				| ```Object<{type:string,from:string,hostname:string,className:string,href:string,text:string,src:string}>```				|
-
+| $on	|网页长按事件返回消息				| WEB-ACTION				| ```Object<any>```				|
+																	
 
 
 

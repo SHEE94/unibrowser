@@ -42,7 +42,7 @@ try {
 
 			const webSDK = {
 				current: webview,
-				version:version,
+				version: version,
 				sendMessage: function(obj) {
 					window.webviewCG.webView.postMessage({
 						data: {
@@ -74,11 +74,10 @@ try {
 					}
 				}
 			};
-			
+
 
 			let touchX = 0;
 			let touchY = 0;
-			let touchEle = [];
 
 			let settingConfigObj = plus.storage.getItem('settingConfig')
 			if (typeof settingConfigObj == 'string') {
@@ -269,6 +268,9 @@ try {
 			history.pushState = _historyWrap('pushState');
 			history.replaceState = _historyWrap('replaceState')
 			// 打开系统播放器
+			/**
+			 * @param {string} src
+			 */
 			function openSysVideo(src) {
 				let Intent = plus.android.importClass("android.content.Intent");
 				let Uri = plus.android.importClass("android.net.Uri");
@@ -532,6 +534,11 @@ try {
 			// 选中的标签
 			let actionTag = ['A', 'IMG', 'IFRAME', 'VIDEO'];
 
+			/**
+			 * @param {number} x
+			 * @param {number} y
+			 * @returns {Array<HTMLElement>}
+			 */
 			function getActionNodes(x, y) {
 				let nodes = document.elementsFromPoint(x, y)
 				let tages = []
@@ -543,14 +550,31 @@ try {
 				return tages;
 			}
 
+			/**
+			 * @param {HTMLElement} target
+			 * @returns {Array<HTMLElement>}
+			 */
+			function getTargetActionNodes(_target) {
+				let nodes = [];
 
-			let timeOutEvent = null;
+				function getNodes(target) {
+					let parentNode = target.parentNode;
+					if (actionTag.includes(target.tagName)) {
+						nodes.push(target)
+					}
+					parentNode ? getNodes(parentNode) : getNodes = null;
+				}
+				getNodes(_target)
+				return nodes;
+			}
+
+			/**
+			 * @param {HTMLElement} target
+			 */
 			const longShow = function(target) {
 
-
 				let hostname = location.hostname;
-
-				let eles = getActionNodes(touchX, touchY) || target;
+				let eles = getActionNodes(touchX, touchY) || getTargetActionNodes(target);
 
 				let tagName,
 					eleSrc,
@@ -594,76 +618,11 @@ try {
 					}
 
 				})
-				clearTimeout(timeOutEvent)
-				
+
 				window.webviewCG.webView.navigateTo({
 					url: '/pages/popup/popup' + Param
 				})
 
-			}
-			
-			let longClick = function() {
-
-				let longTarget = null;
-
-				let gtouchstart = function(event) {
-
-					event.stopPropagation();
-					let touch = event.touches[0];
-					touchX = touch.clienX || event.target.offsetLeft;
-					touchY = touch.clientY || event.target.offsetTop;
-
-					longTarget = event.target;
-					timeOutEvent = _setTimeout(longPress, 500);
-					return false;
-				};
-
-				let gtouchend = function(event) {
-
-					event.stopPropagation();
-					longTarget = null;
-					clearTimeout(timeOutEvent);
-					if (timeOutEvent != null) {
-						// 单击
-						webSDK.getClickTarget && webSDK.getClickTarget(event.target);
-					}
-					return false;
-				};
-
-				let gtouchmove = function(event) {
-					event.stopPropagation();
-					clearTimeout(timeOutEvent);
-					longTarget = null;
-					timeOutEvent = null;
-				};
-
-				let longPress = function(e) {
-
-					timeOutEvent = null;
-					// 长按
-					webSDK.getLongCLickTarget && webSDK.getLongCLickTarget(longTarget)
-				}
-				document.addEventListener('touchstart', gtouchstart);
-				document.addEventListener('touchmove', gtouchmove);
-				document.addEventListener('touchend', gtouchend);
-				document.addEventListener('touchcancel', gtouchmove)
-				document.addEventListener('blur',gtouchmove)
-				window.addEventListener('scroll',gtouchmove)
-				document.addEventListener('mousecancel', gtouchmove)
-				
-			}
-			window.alert = function() {
-				timeOutEvent && clearTimeout(timeOutEvent);
-				_alert.apply(this, arguments)
-			}
-
-			window.confirm = function() {
-				timeOutEvent && clearTimeout(timeOutEvent);
-				return _confirm.apply(this, arguments)
-			}
-
-			webSDK.getLongCLickTarget = function(target) {
-				longShow(target)
 			}
 
 
@@ -678,7 +637,12 @@ try {
 				}
 			}, 10)
 			if (!window.webSDK) {
-				longClick()
+				document.addEventListener('contextmenu', function(event) {
+					touchX = event.x;
+					touchY = event.y;
+					let target = event.target;
+					longShow(target)
+				})
 				window.webSDK = webSDK;
 			}
 		}

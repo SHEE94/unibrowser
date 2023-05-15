@@ -30,7 +30,6 @@
 		data() {
 			return {};
 		},
-
 		methods: {
 			clipText(text) {
 				uni.setClipboardData({
@@ -172,7 +171,7 @@
 				color: #999;
 				overflow: hidden;
 				text-overflow: ellipsis;
-				max-height: 15px;
+				max-height: 18px;
 			}
 
 			.btn {

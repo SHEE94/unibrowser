@@ -40,6 +40,7 @@ export default {
 			this.tag = options.type;
 			this.src = decodeURIComponent(options.src);
 			this.href = decodeURIComponent(options.href);
+			
 			this.text = options.text;
 			this.className = options.className;
 			this.hostname = options.hostname
@@ -49,11 +50,6 @@ export default {
 			this.bgcolor = 'rgba(0,0,0,.5)'
 			this.from = 'bg'
 		}
-		// else if(options.from == 'webdata'){
-		// 	let data = JSON.parse(decodeURI(options.jsonback));
-		// 	uni.$emit('WEB-MESSAGE',data)
-		// 	uni.navigateBack()
-		// }
 	},
 	methods: {
 		close() {

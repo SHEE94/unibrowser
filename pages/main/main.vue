@@ -128,7 +128,11 @@
 
 		onShow() {
 			app.globalData.LoadResource = []
-			let homebookmark = uni.getStorageSync('homebookmark') || this.defaultBookmark;
+			let homebookmark = uni.getStorageSync('homebookmark');
+			if (!homebookmark) {
+				uni.setStorageSync('homebookmark', this.defaultBookmark)
+				homebookmark = this.defaultBookmark;
+			}
 			homebookmark = homebookmark.map((e) => {
 				return {
 					...e,
@@ -295,8 +299,8 @@
 			inputsearch(e) {
 				let val = e.detail.value;
 				this.showHistory = []
-				if (!val)return;
-				
+				if (!val) return;
+
 
 				debounce((val) => {
 					searchKeyword(val).then(res => {
@@ -493,15 +497,18 @@
 		justify-content: space-between;
 		transform: scale(0);
 		opacity: 0;
-		.tips{
+
+		.tips {
 			font-size: 10px;
 		}
+
 		.btns {
 			display: flex;
 			width: 25%;
 			justify-content: space-between;
 			align-items: center;
 			font-size: 12px;
+
 			.btn {
 				border-radius: 10px;
 				padding: 0 10px;

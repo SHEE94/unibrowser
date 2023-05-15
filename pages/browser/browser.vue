@@ -96,10 +96,10 @@
 		},
 		onShow() {
 			this.windowResize();
-			if(this.webviewList[this.WVindex]){
+			if (this.webviewList[this.WVindex]) {
 				this.webviewList[this.WVindex].resume()
 			}
-			
+
 		},
 		onUnload() {
 			this.offListener();
@@ -155,7 +155,7 @@
 							fontSize: '18px',
 							float: 'right',
 							onclick: this.websiteInfo,
-							color:'#55aa7f'
+							color: '#55aa7f'
 						} //网站信息
 						// { float: 'right', fontSrc: '_www/static/iconfont.ttf', text: '\ue609', fontSize: '18px' ,onclick:this.canback}
 					]
@@ -356,8 +356,18 @@
 				wv.addEventListener('loaded', setList)
 				wv.addEventListener('close', setList)
 			},
-
+			// 获取单独网站配置文件
+			getWebsiteConfig(url) {
+				let websiteSetting = uni.getStorageSync('websiteSetting') || {}
+				for (let key in websiteSetting) {
+					if (url.indexOf(websiteSetting) > -1) {
+						return websiteSetting[key]
+					}
+				}
+				return null;
+			},
 			createWebView(url, _id) {
+
 				let id = _id || this.uuid();
 				uni.navigateTo({
 					url: '../popup/popup?from=back'
@@ -379,6 +389,7 @@
 						cachemode: 'cacheElseNetwork',
 						hardwareAccelerated: true,
 						plusrequire: 'ahead',
+						videoFullscreen: 'landscape-primary',
 						progress: {
 							color: '#4580ee',
 							height: '2px'
@@ -393,7 +404,15 @@
 				);
 
 				this.currentWV++;
-				wv.loadURL(url);
+
+				let config = this.getWebsiteConfig(url)
+				let additionalHttpHeaders = {}
+				try {
+					additionalHttpHeaders = JSON.parse(config.additionalHttpHeaders)
+				} catch (e) {
+					//TODO handle the exception
+				}
+				wv.loadURL(url, additionalHttpHeaders);
 
 				let currentWebview = this.currentWebview;
 				currentWebview.append(wv);
@@ -474,7 +493,7 @@
 						}
 						// 加载新数据停止下拉刷新
 						wv.endPullToRefresh();
-						
+						this.setTitltData();
 					});
 
 					wv.addEventListener('loaded', e => {
@@ -565,6 +584,7 @@
 					j++;
 				}
 				this.dragWebview();
+				this.setTitltData();
 			},
 			// 设置拖着
 			dragWebview() {
@@ -735,12 +755,13 @@
 						plus.nativeUI.toast(this.$t("browser.tips.6"));
 						this.createWebView(e.url);
 					} else if (e.type == -1) {
-						this.webviewList[this.WVindex].loadURL(e.url);
+						this.webviewList[this.WVindex] ? this.webviewList[this.WVindex].loadURL(e.url) : this
+							.webviewList[this.webviewList.length - 1].loadURL(e.url)
 					}
 				});
 				// 点击书签
 				uni.$on('BOOK-MARK', e => {
-					console.log('BOOK-MARK', this.webviewList);
+
 					if (this.webviewList.length > 0) {
 						this.webviewList[this.WVindex].loadURL(e.url);
 					}
@@ -907,7 +928,7 @@
 						}
 					};`);
 				})
-				
+
 				// 监听资源加载
 				this.webviewList[this.WVindex].listenResourceLoading('', evt => {
 					if (this.settingConfig.resLog) {

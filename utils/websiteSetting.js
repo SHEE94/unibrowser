@@ -11,5 +11,6 @@ export default {
 	otherWebsite: false, //跳转第三方网站
 	fingerprint: false, //指纹追踪
 	autoDownload:false, //自动下载
-	dev:false //开发者模式
+	dev:false ,//开发者模式
+	additionalHttpHeaders:{}
 }

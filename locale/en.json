@@ -219,5 +219,7 @@
 	"website.tips.1":"Current site Settings",
 	"website.tips.2":"Reset",
 	"website.tips.3":"Successful",
-	"website.tips.4":"Statistics"
+	"website.tips.4":"Statistics",
+	"website.tips.5":"输入JSON类型",
+	"webite.additionalHttpHeaders":"Additional Http Headers"
 }

@@ -218,5 +218,7 @@
 	"website.tips.1":"当前网站设置",
 	"website.tips.2":"重置",
 	"website.tips.3":"已重置",
-	"website.tips.4":"载入中"
+	"website.tips.4":"载入中",
+	"website.tips.5":"输入json格式",
+	"webite.additionalHttpHeaders":"自定义请求头"
 }
