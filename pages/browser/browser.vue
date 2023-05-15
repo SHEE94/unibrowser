@@ -412,7 +412,7 @@
 				} catch (e) {
 					//TODO handle the exception
 				}
-				wv.loadURL(url, additionalHttpHeaders);
+				wv.loadURL(url);
 
 				let currentWebview = this.currentWebview;
 				currentWebview.append(wv);
