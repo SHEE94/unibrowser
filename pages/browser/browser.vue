@@ -405,13 +405,13 @@
 
 				this.currentWV++;
 
-				let config = this.getWebsiteConfig(url)
-				let additionalHttpHeaders = {}
-				try {
-					additionalHttpHeaders = JSON.parse(config.additionalHttpHeaders)
-				} catch (e) {
-					//TODO handle the exception
-				}
+				// let config = this.getWebsiteConfig(url)
+				// let additionalHttpHeaders = {}
+				// try {
+				// 	additionalHttpHeaders = JSON.parse(config.additionalHttpHeaders)
+				// } catch (e) {
+				// 	//TODO handle the exception
+				// }
 				wv.loadURL(url);
 
 				let currentWebview = this.currentWebview;

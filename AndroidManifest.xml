@@ -26,7 +26,6 @@
                 <data android:scheme="http" />
                 <data android:scheme="https" />
                 <data android:scheme="ftp" />
-				<data android:mimeType="*/*"/>
             </intent-filter>
         </activity>
         <activity
