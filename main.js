@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App'
 
-
+plus.navigator.closeSplashscreen();
 import messages from './locale/index'
 import './utils/webEvent.js'
 let i18nConfig = {

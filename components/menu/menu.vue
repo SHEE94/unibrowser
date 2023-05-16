@@ -171,7 +171,7 @@
 				color: #999;
 				overflow: hidden;
 				text-overflow: ellipsis;
-				max-height: 18px;
+				max-height: 16px;
 			}
 
 			.btn {

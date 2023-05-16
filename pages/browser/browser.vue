@@ -539,6 +539,7 @@
 						}
 						setTimeout(() => {
 							this.removeDom(wv);
+							this.readMode(wv)
 						}, 1000)
 					});
 					this.setWebviewClient(nwv);
@@ -918,6 +919,11 @@
 							break;
 					}
 				});
+				
+				uni.$on('READ-MODE', () => {
+					app.globalData.read = !app.globalData.read
+					this.readMode(this.webviewList[this.WVindex])
+				})
 				uni.$on('CLEAR-CACHE', () => {
 					this.webviewList[this.WVindex].evalJS(`
 					localStorage.clear();
@@ -935,6 +941,65 @@
 						this.allRes.unshift(evt.url);
 					}
 				});
+			},
+			// read mode
+			readMode(wv) {
+				if(!wv)return;
+				if (app.globalData.read) {
+					wv.evalJS(`
+					(function() {
+						let readNodes = {
+							score: 0,
+						};
+						const nodes = document.body.getElementsByTagName('p');
+						for (var i = 0, len = nodes.length; i < len; i++) {
+							const node = nodes[i];
+							let score = 1;
+							const text = node.innerText;
+							const reg = ${new RegExp(/(：|。|；|，|,|\.|\?|”)/,'g')};
+							score += text.split(reg).length;
+							score += Math.min(Math.floor(text.length / 100), 3);
+							typeof node.score !== 'number' && (node.score = 0);
+							node.score += score;
+							node.setAttribute('score', node.score);
+							(node.score > readNodes.score) && (readNodes = node);
+							let index = 0;
+							let tempNode = node.parentElement;
+							while (tempNode && tempNode.tagName !== 'BODY') {
+								if (/div|article|section/i.test(tempNode.tagName)) {
+									(typeof tempNode.score !== 'number') && (tempNode.score = 0);
+									tempNode.score += (score / (index < 2 ? index + 2 : index * 3));
+									tempNode.setAttribute('score', tempNode.score);
+									(tempNode.score > readNodes.score) && (readNodes = tempNode);
+									if (++index >= 3) {
+										break;
+									}
+								}
+								tempNode = tempNode.parentElement;
+							}
+						};
+						if (readNodes) {
+							readNodes.style.cssText = 'background:#e6cea0;color:#000;display: block; position: fixed; inset: 0;z-index:999999;overflow-y:auto;padding:12px;';
+							document.querySelectorAll('header,footer').forEach(function(n){
+								n.style.display = 'none';
+							});
+							
+							window.readNodes = readNodes;
+						}
+					})()
+					`)
+					
+				} else {
+					wv.evalJS(`
+					if(window.readNodes){
+						window.readNodes.style.cssText = 'display: block;';
+						document.querySelectorAll('header,footer').forEach(function(n){
+							n.style.display = 'initial';
+						});
+					}
+					`)
+				}
+
 			},
 			// AMD下载
 			downloadADM(url) {

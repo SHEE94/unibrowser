@@ -16,7 +16,7 @@
 			settingConfig: settingConfigFile,
 			Dlan: {},
 			lastPage: [],
-
+			read: false
 		},
 		onLaunch: function() {
 
@@ -38,9 +38,6 @@
 			plus.navigator.setUserAgent(ua, false);
 
 			this.getIntentData(arg)
-
-			plus.navigator.closeSplashscreen();
-
 		},
 		onShow: function() {
 
@@ -49,8 +46,8 @@
 				this.getIntentData(arg)
 			});
 		},
-		methods:{
-			getIntentData(arg){
+		methods: {
+			getIntentData(arg) {
 				if (typeof arg == 'string') {
 					try {
 						arg = JSON.parse(arg);
