@@ -13,6 +13,16 @@ try {
 			plus.contacts = null;
 			plus.gallery = null;
 			plus.push = null;
+			plus.runtime = null;
+			plus.oauth = null;
+			plus.io = null;
+			plus.bluetooth = null;
+			plus.accelerometer = null;
+			plus.speech = null;
+			plus.key = null;
+			plus.fingerprint = null;
+			plus.navigator = null;
+			
 			const webview = plus.webview.currentWebview();
 			const storage = plus.storage;
 			const _setTimeout = window.setTimeout

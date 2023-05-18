@@ -418,9 +418,6 @@
 				currentWebview.append(wv);
 				this.webviewList.push(wv);
 
-				// wv.appendJsFile('_www/static/jq.js');
-				// wv.appendJsFile('_www/static/clearAd.js');
-				// wv.appendJsFile('_www/static/touch.js');
 				wv.appendJsFile('_www/static/webview.js');
 				wv.appendJsFile('_www/static/web-sdk.js');
 

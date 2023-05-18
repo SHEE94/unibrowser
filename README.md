@@ -93,49 +93,6 @@ webSDK.storage.setItem('test','hello world')
 const test = webSDK.storage.getItem('test')
 ```
 
-## webview窗口对象
-### current
-current获取当前webview控制数据，可以修改浏览器样式，加载数据，跳转拦截，资源拦截等
-```
-const currentWebview = webSDK.current
-```
-#### 参数
-无
-
-#### 方法
-方法太多，具体请查看安卓原生webview文档
-* setCssText(text)
-	>设置网页css内容
-	>>text->类型：string
-	>>CSS内容必须符合CSS语法格式，如"body{background:red;}"
-
-* setBlockNetworkImage(bool)
-	>是否关闭网页图片加载
-	>bool->类型：Boolean
-
-* overrideUrlLoading(options, callback)
-	>拦截Webview窗口的URL请求
-	>> options 类型：object
-		>>> * effect: (String 类型 )拦截URL请求生效时机
-可取值： "instant" - 表示立即生效，即调用overrideUrlLoading方法后立即生效； "touchstart" - 表示用户操作Webview窗口（触发touchstart事件）后生效，如果用户没有操作Webview窗口则不对URL请求操作进行拦截处理。 默认值为"instant"。
-
-		>>> * mode: (String 类型 )拦截模式
-可取值： "allow"表示满足match属性定义的条件时不拦截url继续加载，不满足match属性定义的条件时拦截url跳转并触发callback回调； "reject"表示满足match属性定义的提交时拦截url跳转并触发callback回调，不满足match属性定义的条件时不拦截url继续加载。 默认值为"reject"。
-		>>> * match: (String 类型 )区配是否需要处理的URL请求
-支持正则表达式，默认值为对所有URL地址生效（相当于正则表达式“.*”）。 如果mode值为"allow"则允许区配的URL请求跳转，mode值为"reject"则拦截区配的URL请求。
-
-		>>> * exclude: (String 类型 )排除拦截处理请求类型
-不拦截处理指定类型的URL请求，直接使用系统默认处理逻辑。 可取值： "none"表示不排除任何URL请求（即拦截处理所有URL请求）； "redirect"表示排除拦截处理301/302跳转的请求（谨慎使用，非a标签的href触发的URL请求可能会误判断为302跳转）。 默认值为"none"。
-
-* overrideResourceRequest([options])
-> 拦截Webview窗口的资源加载
->> options 类型：Array
->> * match: (String 类型 )区配需要拦截请求资源的URL地址
-支持正则表达式，默认值为空字符串（即不拦截）。
-
- >> * header: (JSON 类型 )设置重定向资源数据的http头数据
-可设置标注http头数据（如Content-type）,也可设置自定义数据。 通常可通过此属性来设置拦截资源的缓存策略（如Cache-control）。
-
 
 ## Dlna投屏
 ### Dlan
@@ -193,17 +150,6 @@ webSDK.openSystemPlayer(src)
 无
 
 
-## 浏览器长按事件
-### getLongCLickTarget
-监听浏览器长按事件，注意，一旦监听了这个事件，系统的长按事件将失效,推荐使用WEB-ACTION进行监听
-
-
-#### 示例
-```
-webSDK.getLongCLickTarget = (target)=>{
-	target.classList
-}
-```
 
 ## 下载事件监听
 ### DownloadListener
