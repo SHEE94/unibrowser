@@ -26,6 +26,10 @@ try {
 			const webview = plus.webview.currentWebview();
 			const storage = plus.storage;
 			const _setTimeout = window.setTimeout
+			
+			const Intent = plus.android.importClass("android.content.Intent");
+			const Uri = plus.android.importClass("android.net.Uri");
+			const main = plus.android.runtimeMainActivity();
 
 			const require = function(src) {
 				if (!src) return;
@@ -277,14 +281,13 @@ try {
 			};
 			history.pushState = _historyWrap('pushState');
 			history.replaceState = _historyWrap('replaceState')
+			
+			
 			// 打开系统播放器
 			/**
 			 * @param {string} src
 			 */
 			function openSysVideo(src) {
-				let Intent = plus.android.importClass("android.content.Intent");
-				let Uri = plus.android.importClass("android.net.Uri");
-				let main = plus.android.runtimeMainActivity();
 				let intent = new Intent(Intent.ACTION_VIEW);
 				let uri = Uri.parse(src);
 				intent.setDataAndType(uri, "video/*");
@@ -302,9 +305,6 @@ try {
 				}
 				$play.apply(this, arguments)
 			}
-
-
-
 
 			function interceptClip() {
 				let $execCommand = document.execCommand;
